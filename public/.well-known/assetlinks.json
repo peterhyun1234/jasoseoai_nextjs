@@ -1,0 +1,6 @@
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target" : { "namespace": "android_app", "package_name": "com.dansungbee.twa",
+                     "sha256_cert_fingerprints": ["EA:6D:2F:FB:05:63:CC:7F:6B:46:D4:C4:42:21:84:C4:39:09:32:5C:9A:89:A9:FA:D5:A7:70:BF:FA:69:5F:DF"] }
+      }
+]

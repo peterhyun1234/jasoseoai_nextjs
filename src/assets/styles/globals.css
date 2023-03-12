@@ -1,0 +1,165 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css");
+
+* {
+  outline: none;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -ms-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden !important;
+  min-height: -webkit-fill-available;
+}
+
+a {
+  text-decoration-line: none;
+}
+
+p {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+input::-webkit-input-placeholder {
+  color: #c9c9c9;
+}
+
+input:-ms-input-placeholder {
+  color: #c9c9c9;
+}
+
+textarea {
+  user-select: auto;
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  -khtml-user-select: auto;
+  -ms-user-select: auto;
+}
+
+input {
+  user-select: auto;
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  -khtml-user-select: auto;
+  -ms-user-select: auto;
+}
+
+.basic-text-area {
+  box-sizing: border-box;
+  padding: 4px 1px;
+  border: 0;
+  font-size: 12px;
+  font-weight: 300;
+  width: 100%;
+  height: 130px;
+  border-top: solid 2px #327bff;
+  border-bottom: solid 2px #dddddd;
+  resize: none;
+}
+
+.p-title {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.p-top {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.span-gray {
+  font-size: 12px;
+  display: inline-block;
+  color: #7b7b7b;
+  margin-right: 7px;
+}
+
+.p-limit {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  width: 100%;
+  overflow: hidden;
+}
+
+.p-bold {
+  font-weight: bold;
+}
+
+.p-head {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.wrap-pointer {
+  cursor: pointer;
+}
+
+.p-error {
+  font-size: 10px;
+  text-align: left;
+  color: #ff5243;
+}
+
+.img-gray {
+  -webkit-filter: grayscale(100%);
+}
+
+.MuiTouchRipple-root {
+  display: none;
+}
+
+.MuiCardActionArea-focusHighlight {
+  display: none;
+}
+
+.MuiBottomNavigation-root {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.slick-slider .slick-list {
+  padding-left: 20px;
+}
+
+/* .firstLevelCategoryTab {
+  color: #000;
+  font-size: 15px;
+}
+
+.firstLevelCategoryTabs.MuiTab-root.Mui-selected {
+  color: #327BFF;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.firstLevelCategoryTabs.MuiTabs-indicator {
+  background-color: #327BFF;
+}
+
+.secondLevelCategoryTab {
+  color: #666666;
+  font-size: 13px;
+  text-align: center;
+}
+
+.firstLevelCategoryTabs.MuiTab-root.Mui-selected {
+  color: #659bfc;
+  font-size: 14px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.firstLevelCategoryTabs.MuiTabs-indicator {
+  background-color: transparent;
+} */
