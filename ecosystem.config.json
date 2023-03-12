@@ -1,17 +1,6 @@
 {
   "apps": [
     {
-      "name": "jasoseoai-nextjs-dev",
-      "script": "next start -p 4001",
-      "instances": 1,
-      "autorestart": true,
-      "watch": false,
-      "time": true,
-      "env": {
-        "NEXT_PUBLIC_DEPLOY_MODE": "development"
-      }
-    },
-    {
       "name": "jasoseoai-nextjs-prod",
       "script": "node_modules/next/dist/bin/next",
       "args": "start -p 4000",

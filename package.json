@@ -4,14 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 4001",
-    "build:beta": "env-cmd -f .env.development next build",
-    "build:release": "env-cmd -f .env.production next build",
+    "build": "env-cmd -f .env.production next build",
     "start": "next start -p 4001",
-    "pm2:beta": "pm2 start ecosystem.config.json --only jasoseoai-nextjs-dev",
-    "pm2:release": "pm2 start ecosystem.config.json --only jasoseoai-nextjs-prod",
-    "submodule:init": "git submodule update --init",
-    "submodule": "git submodule foreach npm install",
-    "submodule:update": "git submodule update --remote --merge",
+    "pm2": "pm2 start ecosystem.config.json --only jasoseoai-nextjs-prod",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepare": "husky install"
@@ -41,15 +36,11 @@
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
     "react-markdown": "^8.0.5",
-    "react-swipeable-views": "^0.14.0",
-    "react-swipeable-views-utils": "^0.14.0",
     "remark-gfm": "^3.0.1",
     "smoothscroll-polyfill": "^0.4.4",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
-    "@types/react-swipeable-views": "^0.13.1",
-    "@types/react-swipeable-views-utils": "^0.13.4",
     "@types/smoothscroll-polyfill": "^0.3.1",
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.51.0",

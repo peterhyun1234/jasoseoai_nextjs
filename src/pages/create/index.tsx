@@ -5,12 +5,8 @@ import { useRouter } from 'next/router';
 
 import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
 
-const Home = () => {
+const Create = () => {
     const router = useRouter()
-
-    const onClickLogo = () => {
-        router.push('/')
-    }
 
     useEffect(() => {
         console.log('location', location)
@@ -23,13 +19,13 @@ const Home = () => {
                 <Inner_TopAppBar_Home />
             }
             <WrapBox>
-                <h1>Home</h1>
-                <h1>Home</h1>
-                <h1>Home</h1>
-                <h1>Home</h1>
-                <h1>Home</h1>
-                <h1>Home</h1>
-                <h1>Home</h1>
+                <h1>Create</h1>
+                <h1>Create</h1>
+                <h1>Create</h1>
+                <h1>Create</h1>
+                <h1>Create</h1>
+                <h1>Create</h1>
+                <h1>Create</h1>
             </WrapBox>
         </>
     )
@@ -41,4 +37,4 @@ const WrapBox = Styled.div`
     padding-top: 60px;
 `
 
-export default Home;
+export default Create;
