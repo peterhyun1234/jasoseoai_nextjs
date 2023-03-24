@@ -3,9 +3,9 @@ import Styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
+import Inner_TopAppBar_SignIn from '@/components/appBar/Inner_TopAppBar_SignIn';
 
-const Correct = () => {
+const SignIn = () => {
     const router = useRouter()
 
     useEffect(() => {
@@ -20,13 +20,19 @@ const Correct = () => {
             backgroundSize: '100%',
         }}>
             {
-                <Inner_TopAppBar_Home />
+                <Inner_TopAppBar_SignIn />
             }
             <WrapBox>
-                <h1>Correct</h1>
-                <h1>잘 쓴 부분</h1>
-                <h1>고쳐야 할 부분</h1>
-                <h1>맞춤법 검사(Beta)</h1>
+                <h1>SignIn</h1>
+                <h1>준비중</h1>
+                <h1>준비중</h1>
+                <h1>준비중</h1>
+                <h1>준비중</h1>
+                <h1>준비중</h1>
+                <h1>준비중</h1>
+                <h1>준비중</h1>
+                <h1>준비중</h1>
+                <h1>준비중</h1>
             </WrapBox>
         </div>
     )
@@ -39,4 +45,4 @@ const WrapBox = Styled.div`
     padding-top: 80px;
 `
 
-export default Correct;
+export default SignIn;

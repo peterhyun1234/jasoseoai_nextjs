@@ -132,34 +132,11 @@ input {
   padding-left: 20px;
 }
 
-/* .firstLevelCategoryTab {
-  color: #000;
-  font-size: 15px;
+.MuiInputBase-input {
+  font-size: 17px;
+  line-height: 1.5;
 }
-
-.firstLevelCategoryTabs.MuiTab-root.Mui-selected {
-  color: #327BFF;
+.MuiInputBase-input::placeholder {
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
 }
-
-.firstLevelCategoryTabs.MuiTabs-indicator {
-  background-color: #327BFF;
-}
-
-.secondLevelCategoryTab {
-  color: #666666;
-  font-size: 13px;
-  text-align: center;
-}
-
-.firstLevelCategoryTabs.MuiTab-root.Mui-selected {
-  color: #659bfc;
-  font-size: 14px;
-  text-align: center;
-  font-weight: bold;
-}
-
-.firstLevelCategoryTabs.MuiTabs-indicator {
-  background-color: transparent;
-} */

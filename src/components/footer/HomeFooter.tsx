@@ -47,7 +47,7 @@ const HomeFooter = () => {
                 <Collapse in={isCompanyInfoOpen} timeout="auto" unmountOnExit>
                     <Content>
                         회사명 : 포트밸류 <br />
-                        대표이사 : 조현욱｜서비스명 : 단성비 <br />
+                        대표이사 : 조현욱｜서비스명 : 자소서 AI <br />
                         사업자등록번호 : 295-54-00746 <br />
                         주소 : 경기도 용인시 수지구 죽전로 152, 단국대학교 글로컬산학협력관 207호 <br />
                     </Content>
