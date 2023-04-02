@@ -4,7 +4,6 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 
 import Inner_TopAppBar from '@/components/appBar/Inner_TopAppBar'
-import Blue_BottomButton from '@/components/button/Blue_BottomButton';
 
 import { RULES_1, RULES_2 } from '@/assets/docs/rules';
 
@@ -46,13 +45,6 @@ const Terms = ({ }: any) => {
                     </EactDiv>
                 </FullBox>
             </WrapBox>
-            <Blue_BottomButton
-                title={'뒤로가기'}
-                onClickEvent={() => {
-                    controlGoBack()
-                }
-                }
-            />
         </>
     )
 };

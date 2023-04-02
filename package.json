@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 4001",
+    "dev": "next dev -p 4000",
     "build": "env-cmd -f .env.production next build",
-    "start": "next start -p 4001",
-    "pm2": "pm2 start ecosystem.config.json --only jasoseoai-nextjs-prod",
+    "start": "next start -p 4000",
+    "docker:build": "docker build --pull --rm -f \"Dockerfile\" -t jasoseoainextjs:latest \".\" ",
+    "docker:run": "docker run -d -p 4000:4000 jasoseoainextjs",
+    "pm2": "pm2 list && pm2-runtime start pm2.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepare": "husky install"
