@@ -1,26 +1,27 @@
-# 베이스 이미지 설정
-FROM node:16.14.2-alpine
+# Build stage
+FROM node:16.14.2-alpine as build-env
 
-# 작업 디렉토리 설정
 WORKDIR /app
 
-# package.json 및 package-lock.json 복사
 COPY package*.json ./
-
-# 의존성 설치
 RUN npm ci
-
-# 프로젝트 소스 복사
 COPY . .
-
-# 프로젝트 빌드
 RUN npm run build
 
-# PM2 설치
+# Production stage
+FROM node:16.14.2-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY --from=build-env /app/.next /app/.next
+COPY --from=build-env /app/public /app/public
+COPY --from=build-env /app/pm2.json /app/pm2.json
+
 RUN npm install -g pm2
 
-# 노출할 포트 설정
 EXPOSE 4000
 
-# PM2를 사용하여 애플리케이션 실행
 CMD ["npm", "run", "pm2"]
