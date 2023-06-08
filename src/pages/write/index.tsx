@@ -479,8 +479,8 @@ const WritingResumeFunctionBox = Styled.div`
     width: fit-content;
     background-color: #fff;
     border-radius: 10px 10px 0px 0px;
-    -webkit-box-shadow: -1px -2px 6px 0px rgba(0,0,0,0.67); 
-    box-shadow: -1px -2px 6px 0px rgba(0,0,0,0.67);
+    -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px; 
+    box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
     padding: 10px;
     margin-left: 7px;
 `
@@ -498,8 +498,8 @@ const FunctionButtonDiv = Styled.div`
     &:hover {
         background-color: #428d93;
         color: #fff;
-        -webkit-box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67); 
-        box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67);
+        -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px; 
+        box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
     }
 `
 const FunctionIconDiv = Styled.div`
@@ -522,8 +522,8 @@ const WritingResumeBox = Styled.div`
     align-items: center;
     flex-direction: column;
     gap: 20px;
-    -webkit-box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67); 
-    box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67);
+    -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px; 
+    box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
 `
 const WritingCompanyBox = Styled.div`
     width: 100%;
@@ -557,8 +557,8 @@ const WritingCompanyButtonDiv = Styled.div<{ isReadyToSummit: boolean }>`
     cursor: pointer;
     &:hover {
         background-color: ${props => props.isReadyToSummit ? '#428d93' : '#ccc'};
-        -webkit-box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67); 
-        box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67);
+        -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px; 
+        box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
     }
 `
 const WritingCompanyBoxHeaderDiv = Styled.div`
@@ -598,8 +598,8 @@ const ModifyingCompanyButtonDiv = Styled.div`
     border-radius: 5px;
     cursor: pointer;
     &:hover {
-        -webkit-box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67);
-        box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67);
+        -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
+        box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
     }
 `
 const ModifyingCompanyIconDiv = Styled.div`
@@ -628,8 +628,8 @@ const WritingResumeSaveButtonDiv = Styled.div`
     border-radius: 5px;
     cursor: pointer;
     &:hover {
-        -webkit-box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67);
-        box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67);
+        -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
+        box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
     }
 `
 const SaveIconDiv = Styled.div`
@@ -689,8 +689,8 @@ const AISwitchBtnDiv = Styled.div<{ isAIReady: boolean }>`
     border-radius: 5px;
     cursor: pointer;
     &:hover {
-        -webkit-box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67);
-        box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67);
+        -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
+        box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
     }
 `
 const AISwitchText = Styled.div`
@@ -802,7 +802,7 @@ const ResumePageDiv = Styled.div`
     left: -45px;
 `
 const ResumePageButtonDiv = Styled.div<{ isSelected: boolean }>`
-    ${props => props.isSelected ? '-webkit-box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67); box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67);' : ''}
+    ${props => props.isSelected ? '-webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px; box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;' : ''}
     display: flex;
     justify-content: center;
     align-items: center;
@@ -815,8 +815,8 @@ const ResumePageButtonDiv = Styled.div<{ isSelected: boolean }>`
     border-radius: 5px;
     cursor: pointer;
     &:hover {
-        -webkit-box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67);
-        box-shadow: -1px 1px 6px 1px rgba(0,0,0,0.67);
+        -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
+        box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
     }
 `
 const ResumePageButtonText = Styled.div`
