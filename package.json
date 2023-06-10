@@ -8,6 +8,7 @@
     "start": "next start -p 4000",
     "docker:build": "docker build --pull --rm -f \"Dockerfile\" -t jasoseoainextjs:latest \".\" ",
     "docker:run": "docker run -d -p 4000:4000 jasoseoainextjs",
+    "ecr:push": "docker tag jasoseoainextjs:latest 076831690411.dkr.ecr.ap-northeast-2.amazonaws.com/jasoseoai_nextjs:latest && docker push 076831690411.dkr.ecr.ap-northeast-2.amazonaws.com/jasoseoai_nextjs:latest",
     "pm2": "pm2 list && pm2-runtime start pm2.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
