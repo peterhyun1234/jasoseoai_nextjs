@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -6,9 +6,57 @@ import { useRouter } from 'next/router';
 import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
 import LoadingPopup from '@/components/popup/LoadingPopup';
 
-import TextField from '@mui/material/TextField';
-
 import temp_intro from '@/assets/images/temp_introduction.gif'
+
+import TextField from '@mui/material/TextField';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+
+import SaveAltRoundedIcon from '@mui/icons-material/SaveAltRounded';
+import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+
+const placeholder = {
+    company: '현대자동차',
+    companyDescription: '현대자동차는 대한민국의 글로벌 자동차 제조 기업으로, 혁신적인 디자인과 첨단 기술을 통해 고품질의 차량을 제공하며, 전 세계적으로 신뢰와 인기를 얻고 있는 브랜드입니다.',
+    job: '글로벌 상용차 신사업 프로젝트 기획/운영',
+    jobDescription: '국내외 상용차(버스 / 트럭 등) 신사업 및 제휴 전략 기획과 신사업 프로젝트 런칭 / 운영 / 관리, 글로벌 생산 거점을 확용한 사업 모델을 분석하고 개발하는 업무를 수행합니다.',
+    name: '홍길동',
+    education: '길동고등학교(스마트 전자과), 길동대학교(컴퓨터공학과) 등',
+    certification: '정보처리기사, 컴퓨터활용능력 1급, 워드프로세서 1급, 컴퓨터그래픽스운용기능사 등',
+    experience: `- 2021.03 ~ 2021.08: (주)홍길동스토어 인턴 (웹 프론트엔드 개발자)
+- 2021.09 ~ 2021.12: (주)김철수스토어 인턴 (웹 프론트엔드 개발자)`,
+    majorProject: `1. 당신을 위한 계산기, 칼큘로
+- 소속: 길동대학교
+- 역할: Front-end 개발(React, GraphQL, es6, typescript)
+- 느낀 점: 이 프로젝트를 통해 React와 GraphQL을 활용한 개발에 대한 깊은 이해를 얻었습니다. 이 기술들을 활용해 복잡한 문제를 해결하는 과정에서 개발자로서의 역량을 향상시킬 수 있었습니다.
+
+2. 홍길동스토어 관리자 페이지, 길동 CMS
+- 소속: (주)홍길동스토어
+- 역할: Front-end 개발(Vue.js, REST API, es6, typescript)
+- 느낀 점: 이 프로젝트를 통해 Vue.js를 사용한 실질적인 비즈니스 로직을 구현하는 데 성공했습니다. REST API와의 통신 과정에서 발생하는 다양한 문제를 해결하며 프론트엔드 개발에 대한 전반적인 이해를 높였습니다.
+
+3. 코딩 아카데미 웹 사이트, 길동코드
+- 소속: (주)길동코드
+- 역할: Full-stack 개발(React, Node.js, MongoDB, REST API, GraphQL)
+- 느낀 점: 이 프로젝트는 프론트엔드와 백엔드의 경계를 넘나드는 경험을 통해 전체 웹 애플리케이션의 아키텍처를 이해하고 관리하는 능력을 향상시켰습니다. 이를 통해 보다 효과적인 개발 프로세스를 경험하고, 사용자 중심의 서비스를 개발하는 데 중점을 두었습니다.`,
+    personality: `- 장점: 긍정적이고 적극적인 성격을 가지고 있습니다. 어떤 일이든 최선을 다해 해내는 것을 좋아합니다.
+- 단점: 물건을 잃어버리는 경향이 있습니다. 또한, 물건을 잃어버렸을 때 그것을 인정하지 않고 무심코 지나치는 경향이 있습니다.`,
+    etc: `- 전문 기술: React, Vue.js, Node.js, MongoDB, GraphQL, REST API, es6, typescript
+- 언어 능력: 영어(토익 900점), 일본어(일상회화 가능)
+- 컴퓨터 능력: MS Office(Word, Excel, PowerPoint), Adobe Photoshop, Adobe Illustrator
+- 봉사 활동: 길동동물보호소 봉사, 길동아동센터 봉사
+- 취미: 노래 부르기, 요리하기, 영화 보기, 책 읽기`,
+    resumeQuestion: '길동전자를 지원한 이유와 입사 후 회사에서 이루고 싶은 꿈을 기술하십시오. (500자 이내)',
+}
+
+const tempGeneratedResume = `1. 길동전자를 지원한 이유와 입사 후 회사에서 이루고 싶은 꿈을 기술하십시오. (500자 이내)
+길동전자는 품질과 혁신에 대한 끊임없는 추구로 인해 업계에서 높은 존경을 받고 있는 기업입니다. 제 개인적으로는 이런 문화에서 깊은 인상을 받았고, 이는 제가 프론트엔드 개발자로서 능력을 최대한 발휘하고 싶어하는 바람과도 잘 어울립니다. 이전에 진행했던 프로젝트들에서 React, Vue.js, Node.js 등 다양한 기술을 사용하여 실질적인 비즈니스 로직을 구현하는 경험을 했습니다. 이런 경험들을 바탕으로 길동전자에서는 사용자 경험을 향상시키는 인터페이스를 개발하고, 그 이면에 있는 복잡한 기술적 문제를 해결하는 데 기여하고 싶습니다. 또한, 차후에는 제 팀을 이끌며, 길동전자의 혁신적인 기업 문화를 지속적으로 발전시키는 데 기여하고 싶습니다.
+
+2. 본인의 성장과정을 간략히 기술하되 현재의 자신에게 가장 큰 연향을 끼친 사건, 인물 등을 포함하며 기술하시기 바랍니다. (500자 이내)
+제 프론트엔드 개발자로서의 여정은 길동대학교에서 '당신을 위한 계산기'라는 프로젝트를 진행하면서 시작되었습니다. 이 프로젝트에서는 React와 GraphQL을 활용하여 개발하였고, 이를 통해 사용자 중심의 인터페이스 개발에 대한 이해를 높이고, 복잡한 문제를 해결하는 능력을 향상시킬 수 있었습니다. 이러한 경험은 저에게 개발자로서의 핵심 역량을 쌓을 수 있는 기회를 제공했고, 이는 나중에 (주)홍길동스토어와 (주)김철수스토어에서 인턴으로 일하면서도 큰 도움이 되었습니다. 특히, 길동 CMS 프로젝트에서는 Vue.js와 REST API를 활용한 실질적인 비즈니스 로직을 구현하는 데 성공했고, 이를 통해 프론트엔드 개발에 대한 전반적인 이해를 높였습니다. 마지막으로 길동코드 프로젝트에서는 Full-stack 개발에 참여하였고, 이를 통해 전체 웹 애플리케이션의 아키텍처를 이해하고 관리하는 능력을 향상시켰습니다. 이런 경험들은 저를 더 나은 개발자로 성장시키는 데 큰 도움을 주었습니다.
+`
 
 const Create = () => {
     const router = useRouter()
@@ -21,7 +69,24 @@ const Create = () => {
     const [companyDescription, setCompanyDescription] = useState<string>('')
     const [job, setJob] = useState<string>('')
     const [jobDescription, setJobDescription] = useState<string>('')
-    
+
+    // step 2
+    const [name, setName] = useState<string>('')
+    const [education, setEducation] = useState<string>('')
+    const [certification, setCertification] = useState<string>('')
+    const [experience, setExperience] = useState<string>('')
+    const [majorProject, setMajorProject] = useState<string>('')
+    const [personality, setPersonality] = useState<string>('')
+    const [etc, setEtc] = useState<string>('')
+
+    // step 3
+    const [resumeFormType, setResumeFormType] = useState<string>('')
+    const [resumeQuestionList, setResumeQuestionList] = useState([''])
+    const [resumeMaxCharacterNum, setResumeMaxCharacterNum] = useState<number>(500)
+
+    // result
+    const [generatedResume, setGeneratedResume] = useState<string>('')
+
     const handleCompanyChange = (e: any) => {
         setCompany(e.target.value)
     }
@@ -33,6 +98,68 @@ const Create = () => {
     }
     const handleJobDescriptionChange = (e: any) => {
         setJobDescription(e.target.value)
+    }
+    const handleNameChange = (e: any) => {
+        setName(e.target.value)
+    }
+    const handleEducationChange = (e: any) => {
+        setEducation(e.target.value)
+    }
+    const handleCertificationChange = (e: any) => {
+        setCertification(e.target.value)
+    }
+    const handleExperienceChange = (e: any) => {
+        setExperience(e.target.value)
+    }
+    const handleMajorProjectChange = (e: any) => {
+        setMajorProject(e.target.value)
+    }
+    const handlePersonalityChange = (e: any) => {
+        setPersonality(e.target.value)
+    }
+    const handleEtcChange = (e: any) => {
+        setEtc(e.target.value)
+    }
+    const handleResumeFormTypeChange = (e: any) => {
+        setResumeFormType(e.target.value)
+    }
+    const handleResumeMaxCharacterNumChange = (e: any) => {
+        const value = e.target.value.replace(/[^0-9]/g, '');
+        if (value > 0) {
+            setResumeMaxCharacterNum(value)
+        }
+    }
+    const handleResumeQuestionChange = (index: number) => (event: { target: { value: string; }; }) => {
+        const newResumeQuestionList = [...resumeQuestionList];
+        newResumeQuestionList[index] = event.target.value;
+        setResumeQuestionList(newResumeQuestionList);
+    }
+    const handleAddQuestion = () => {
+        if (resumeQuestionList.length >= 10) {
+            alert("항목은 최대 10개까지만 입력 가능합니다.");
+            return;
+        }
+        if (new Set(resumeQuestionList).size !== resumeQuestionList.length) {
+            alert("중복된 항목을 입력할 수 없습니다.");
+            return;
+        }
+        setResumeQuestionList([...resumeQuestionList, '']);
+    }
+    const isButtonDisabled = resumeQuestionList.some(question => question === '')
+    const handleDeleteQuestion = (index: number) => () => {
+        setResumeQuestionList(resumeQuestionList.filter((_, i) => i !== index));
+    }
+    const handleGeneratedResumeChange = (e: any) => {
+        setGeneratedResume(e.target.value)
+    }
+
+    const getResume = async () => {
+        setIsLoading(true)
+        // 3초 후에 로딩 끝
+        setGeneratedResume(tempGeneratedResume)
+        setTimeout(() => {
+            setIsLoading(false)
+        }, 3000)
     }
 
     useEffect(() => {
@@ -80,132 +207,359 @@ const Create = () => {
                 {
                     step === 1 &&
                     <CommonBox
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            if (company.length > 0 && job.length > 0) {
-                                setStep(step - 1)
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                if (company.length > 0 && job.length > 0) {
+                                    setStep(step + 1)
+                                }
                             }
-                        }
-                    }}
-                >
+                        }}
+                    >
                         <WritingBox>
                             <WritingBoxTitle>{'🏢 지원하는 회사에 대한 정보를 입력해주세요.'}</WritingBoxTitle>
-                    <WritingDiv>
-                        <WritingText><WritingCompanyTextSpan>{'회사의 이름(필수)'}</WritingCompanyTextSpan></WritingText>
-                        <TextField
-                            id="company"
-                            fullWidth
-                            variant="outlined"
-                            placeholder='현대자동차'
-                            value={company}
-                            onChange={handleCompanyChange}
-                        />
-                    </WritingDiv>
-                    {
-                        company !== '' &&
-                        <WritingDiv>
-                            <WritingText><WritingCompanyTextSpan>{'회사 설명'}</WritingCompanyTextSpan>{'(선택)'}</WritingText>
-                            <TextField
-                                id="companyDescription"
-                                fullWidth
-                                variant="outlined"
-                                multiline
-                                rows={3}
-                                placeholder='현대자동차는 대한민국의 글로벌 자동차 제조 기업으로, 혁신적인 디자인과 첨단 기술을 통해 고품질의 차량을 제공하며, 전 세계적으로 신뢰와 인기를 얻고 있는 브랜드입니다.'
-                                value={companyDescription}
-                                onChange={handleCompanyDescriptionChange}
-                            />
-                        </WritingDiv>
-                    }
-                    <WritingDiv>
-                        <WritingText><WritingCompanyTextSpan>{'직무의 이름(필수)'}</WritingCompanyTextSpan></WritingText>
-                        <TextField
-                            id="job"
-                            fullWidth
-                            variant="outlined"
-                            placeholder='글로벌 상용차 신사업 프로젝트 기획/운영'
-                            value={job}
-                            onChange={handleJobChange}
-                        />
-                    </WritingDiv>
-                    {
-                        job !== '' &&
-                        <WritingDiv>
-                            <WritingText><WritingCompanyTextSpan>{'직무 설명'}</WritingCompanyTextSpan>{'(선택)'}</WritingText>
-                            <TextField
-                                id="jobDescription"
-                                fullWidth
-                                variant="outlined"
-                                multiline
-                                rows={3}
-                                placeholder='국내외 상용차(버스 / 트럭 등) 신사업 및 제휴 전략 기획과 신사업 프로젝트 런칭 / 운영 / 관리, 글로벌 생산 거점을 확용한 사업 모델을 분석하고 개발하는 업무를 수행합니다.'
-                                value={jobDescription}
-                                onChange={handleJobDescriptionChange}
-                            />
-                        </WritingDiv>
-                    }
-                    </WritingBox>
-                    
-                    <CommonButton
-                        isReady={company !== '' && job !== '' ? true : false}
-                        onClick={() => {
-                            if (company !== '' && job !== '') {
-                                setStep(step + 1)
+                            <WritingDiv>
+                                <WritingText><WritingCompanyTextSpan>{'회사의 이름(필수)'}</WritingCompanyTextSpan></WritingText>
+                                <TextField
+                                    id="company"
+                                    fullWidth
+                                    variant="outlined"
+                                    placeholder='현대자동차'
+                                    value={company}
+                                    onChange={handleCompanyChange}
+                                />
+                            </WritingDiv>
+                            {
+                                company !== '' &&
+                                <WritingDiv>
+                                    <WritingText><WritingCompanyTextSpan>{'회사 설명'}</WritingCompanyTextSpan>{'(선택)'}</WritingText>
+                                    <TextField
+                                        id="companyDescription"
+                                        fullWidth
+                                        variant="outlined"
+                                        multiline
+                                        rows={3}
+                                        placeholder='현대자동차는 대한민국의 글로벌 자동차 제조 기업으로, 혁신적인 디자인과 첨단 기술을 통해 고품질의 차량을 제공하며, 전 세계적으로 신뢰와 인기를 얻고 있는 브랜드입니다.'
+                                        value={companyDescription}
+                                        onChange={handleCompanyDescriptionChange}
+                                    />
+                                </WritingDiv>
                             }
-                        }
-                        }
-                    >
-                        자기소개서 작성 시작
-                    </CommonButton>
-                </CommonBox>
+                            <WritingDiv>
+                                <WritingText><WritingCompanyTextSpan>{'직무의 이름(필수)'}</WritingCompanyTextSpan></WritingText>
+                                <TextField
+                                    id="job"
+                                    fullWidth
+                                    variant="outlined"
+                                    placeholder='글로벌 상용차 신사업 프로젝트 기획/운영'
+                                    value={job}
+                                    onChange={handleJobChange}
+                                />
+                            </WritingDiv>
+                            {
+                                job !== '' &&
+                                <WritingDiv>
+                                    <WritingText><WritingCompanyTextSpan>{'직무 설명'}</WritingCompanyTextSpan>{'(선택)'}</WritingText>
+                                    <TextField
+                                        id="jobDescription"
+                                        fullWidth
+                                        variant="outlined"
+                                        multiline
+                                        rows={3}
+                                        placeholder='국내외 상용차(버스 / 트럭 등) 신사업 및 제휴 전략 기획과 신사업 프로젝트 런칭 / 운영 / 관리, 글로벌 생산 거점을 확용한 사업 모델을 분석하고 개발하는 업무를 수행합니다.'
+                                        value={jobDescription}
+                                        onChange={handleJobDescriptionChange}
+                                    />
+                                </WritingDiv>
+                            }
+                        </WritingBox>
+                        <WritingBoxDivider />
+                        <CommonButton
+                            isReady={company !== '' && job !== '' ? true : false}
+                            onClick={() => {
+                                if (company !== '' && job !== '') {
+                                    setStep(step + 1)
+                                }
+                            }
+                            }
+                        >
+                            회사 정보 입력 완료
+                        </CommonButton>
+                    </CommonBox>
                 }
                 {
                     step === 2 &&
-                    <CommonBox>
-                        <button onClick={() => {
-                            setStep(step - 1)
-                        }}>회사 정보 수정</button>
-                        <h1>Page 3</h1>
-                        <h1>개인 정보 입력</h1>
-                        <h1>이름 *</h1>
-                        <h1>학력 *(~학교*, ~과 이거 추가할 수 있도록 ㄱㄱ)</h1>
-                        <h1>경력사항</h1>
-                        <h1>자격증</h1>
-                        <h1>주요 프로젝트</h1>
-                        <h1>성격의 장단점</h1>
-                        <h1>기타: 본인의 전문 기술, 언어 능력, 컴퓨터 능력, 봉사 활동, 취미, 특별한 경험 등의 추가 정보를 고려할 수 있습니다.</h1>
-
-                        <button onClick={() => {
-                            setStep(step + 1)
-                        }}>다음</button>
+                    <CommonBox
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                if (name.length > 0 && education.length > 0) {
+                                    setStep(step + 1)
+                                }
+                            }
+                        }}>
+                        <WritingBoxHeaderDiv>
+                            <WritingBoxHeader>
+                                <WritingCompanyText>{company}</WritingCompanyText>
+                                <WritingJobText>{job}</WritingJobText>
+                                <ModifyingButtonDiv onClick={() => {
+                                    setStep(1)
+                                }}>
+                                    <ModifyingIconDiv>
+                                        <EditRoundedIcon color='inherit' fontSize='inherit' />
+                                    </ModifyingIconDiv>
+                                    <ModifyingText>회사 정보 수정</ModifyingText>
+                                </ModifyingButtonDiv>
+                            </WritingBoxHeader>
+                        </WritingBoxHeaderDiv>
+                        <WritingBoxDivider />
+                        <WritingBox>
+                            <WritingBoxTitle>{'👨🏻‍💻 지원자에 대한 정보를 입력해주세요.'}</WritingBoxTitle>
+                            <WritingDiv>
+                                <WritingText><WritingCompanyTextSpan>{'지원자 이름(필수)'}</WritingCompanyTextSpan></WritingText>
+                                <TextField
+                                    id="name"
+                                    fullWidth
+                                    variant="outlined"
+                                    placeholder={placeholder.name}
+                                    value={name}
+                                    onChange={handleNameChange}
+                                />
+                            </WritingDiv>
+                            <WritingDiv>
+                                <WritingText><WritingCompanyTextSpan>{'최종 학력(필수)'}</WritingCompanyTextSpan></WritingText>
+                                <TextField
+                                    id="education"
+                                    fullWidth
+                                    variant="outlined"
+                                    placeholder={placeholder.education}
+                                    value={education}
+                                    onChange={handleEducationChange}
+                                />
+                            </WritingDiv>
+                            {
+                                name !== '' && education !== '' &&
+                                <>
+                                    <WritingDiv>
+                                        <WritingText><WritingCompanyTextSpan>{'자격증'}</WritingCompanyTextSpan></WritingText>
+                                        <TextField
+                                            id="certification"
+                                            fullWidth
+                                            variant="outlined"
+                                            multiline
+                                            rows={3}
+                                            placeholder={placeholder.certification}
+                                            value={certification}
+                                            onChange={handleCertificationChange}
+                                        />
+                                    </WritingDiv>
+                                    <WritingDiv>
+                                        <WritingText><WritingCompanyTextSpan>{'경력사항'}</WritingCompanyTextSpan></WritingText>
+                                        <TextField
+                                            id="experience"
+                                            fullWidth
+                                            variant="outlined"
+                                            multiline
+                                            rows={3}
+                                            placeholder={placeholder.experience}
+                                            value={experience}
+                                            onChange={handleExperienceChange}
+                                        />
+                                    </WritingDiv>
+                                    <WritingDiv>
+                                        <WritingText><WritingCompanyTextSpan>{'주요 프로젝트'}</WritingCompanyTextSpan></WritingText>
+                                        <TextField
+                                            id="majorProject"
+                                            fullWidth
+                                            variant="outlined"
+                                            multiline
+                                            rows={15}
+                                            placeholder={placeholder.majorProject}
+                                            value={majorProject}
+                                            onChange={handleMajorProjectChange}
+                                        />
+                                    </WritingDiv>
+                                    <WritingDiv>
+                                        <WritingText><WritingCompanyTextSpan>{'성격의 장단점'}</WritingCompanyTextSpan></WritingText>
+                                        <TextField
+                                            id="personality"
+                                            fullWidth
+                                            variant="outlined"
+                                            multiline
+                                            rows={3}
+                                            placeholder={placeholder.personality}
+                                            value={personality}
+                                            onChange={handlePersonalityChange}
+                                        />
+                                    </WritingDiv>
+                                    <WritingDiv>
+                                        <WritingText><WritingCompanyTextSpan>{'기타'}</WritingCompanyTextSpan></WritingText>
+                                        <TextField
+                                            id="etc"
+                                            fullWidth
+                                            variant="outlined"
+                                            multiline
+                                            rows={3}
+                                            placeholder={placeholder.etc}
+                                            value={etc}
+                                            onChange={handleEtcChange}
+                                        />
+                                    </WritingDiv>
+                                </>
+                            }
+                        </WritingBox>
+                        <WritingBoxDivider />
+                        <CommonButton
+                            isReady={name !== '' && education !== '' ? true : false}
+                            onClick={() => {
+                                if (name !== '' && education !== '') {
+                                    setStep(step + 1)
+                                }
+                            }
+                            }
+                        >
+                            개인 정보 입력 완료
+                        </CommonButton>
                     </CommonBox>
                 }
                 {
                     step === 3 &&
                     <CommonBox>
-                        <button onClick={() => {
-                            setStep(step - 1)
-                        }}>개인 정보 수정</button>
-                        <h1>Page 4</h1>
-                        <h1>자기소개서 양식</h1>
-                        <h1>자소서 항목(질문) - 글자 제한</h1>
-                        <h1>자소서 항목(질문) - 글자 제한</h1>
-                        <h1>자소서 항목(질문) - 글자 제한</h1>
-                        <h1>자소서 항목(질문) - 글자 제한</h1>
-                        <button onClick={() => {
-                            setStep(step + 1)
-                        }}>자기소개서 생성</button>
+                        <WritingBoxHeaderDiv>
+                            <WritingBoxHeader>
+                                <WritingCompanyText>{company}</WritingCompanyText>
+                                <WritingJobText>{job}</WritingJobText>
+                                <ModifyingButtonDiv onClick={() => {
+                                    setStep(1)
+                                }}>
+                                    <ModifyingIconDiv>
+                                        <EditRoundedIcon color='inherit' fontSize='inherit' />
+                                    </ModifyingIconDiv>
+                                    <ModifyingText>회사 정보 수정</ModifyingText>
+                                </ModifyingButtonDiv>
+                            </WritingBoxHeader>
+                        </WritingBoxHeaderDiv>
+                        <WritingBoxDivider />
+                        <WritingBoxHeaderDiv>
+                            <WritingBoxHeader>
+                                <WritingCompanyText>{name}</WritingCompanyText>
+                                <WritingJobText>{education}</WritingJobText>
+                                <ModifyingButtonDiv onClick={() => {
+                                    setStep(2)
+                                }}>
+                                    <ModifyingIconDiv>
+                                        <EditRoundedIcon color='inherit' fontSize='inherit' />
+                                    </ModifyingIconDiv>
+                                    <ModifyingText>개인 정보 수정</ModifyingText>
+                                </ModifyingButtonDiv>
+                            </WritingBoxHeader>
+                        </WritingBoxHeaderDiv>
+                        <WritingBoxDivider />
+                        <WritingBox>
+                            <WritingBoxTitle>{'🚥 자기소개서 양식을 선택해주세요.'}</WritingBoxTitle>
+                            <RadioGroupDiv>
+                                <RadioGroup
+                                    name="controlled-radio-buttons-group"
+                                    value={resumeFormType}
+                                    onChange={handleResumeFormTypeChange}
+                                >
+                                    <FormControlLabel value="add" control={<Radio />} label="자기소개서 양식 수정" />
+                                    <FormControlLabel value="maxCharacterNum" control={<Radio />} label="자기소개서 최대 글자 수만 지정" />
+                                    <FormControlLabel value="none" control={<Radio />} label="양식 상관없음" />
+                                </RadioGroup>
+                            </RadioGroupDiv>
+                            {
+                                resumeFormType === 'add' &&
+                                <>
+                                    {resumeQuestionList.map((question, index) => (
+                                        <WritingDiv key={index}>
+                                            <WritingTextDiv>
+                                                <WritingText>
+                                                    <WritingCompanyTextSpan>{'자기소개서 항목 ' + (index + 1)}</WritingCompanyTextSpan>
+                                                </WritingText>
+                                                {index !== resumeQuestionList.length - 1 && (
+                                                    <DeleteButton onClick={handleDeleteQuestion(index)}>
+                                                        삭제
+                                                    </DeleteButton>
+                                                )}
+                                            </WritingTextDiv>
+                                            <TextField
+                                                id={`resumeQuestion-${index}`}
+                                                fullWidth
+                                                variant="outlined"
+                                                multiline
+                                                rows={2}
+                                                placeholder={placeholder.resumeQuestion}
+                                                value={question}
+                                                onChange={handleResumeQuestionChange(index)}
+                                            />
+                                        </WritingDiv>
+                                    ))}
+                                    <AddButton onClick={handleAddQuestion} disabled={isButtonDisabled}>항목 추가</AddButton>
+                                </>
+                            }
+                            {
+                                resumeFormType === 'maxCharacterNum' &&
+                                <>
+                                    <WritingDiv>
+                                        <WritingText><WritingCompanyTextSpan>{'최대 글자 수'}</WritingCompanyTextSpan></WritingText>
+                                        <TextField
+                                            id="resumeMaxCharacterNum"
+                                            fullWidth
+                                            variant="outlined"
+                                            placeholder='글자수 제한을 입력해주세요.'
+                                            value={resumeMaxCharacterNum}
+                                            onChange={handleResumeMaxCharacterNumChange}
+                                        />
+                                    </WritingDiv>
+                                </>
+                            }
+                        </WritingBox>
+                        <WritingBoxDivider />
+                        <CommonButton
+                            isReady={resumeFormType !== '' ? true : false}
+                            onClick={() => {
+                                if (resumeFormType !== '') {
+                                    setStep(step + 1)
+                                    getResume()
+                                }
+                            }
+                            }
+                        >
+                            자기소개서 생성
+                        </CommonButton>
                     </CommonBox>
                 }
                 {
                     step === 4 &&
                     <CommonBox>
-                        <button onClick={() => {
-                            setStep(step - 1)
-                        }}>자기소개서 양식 수정</button>
-                        <h1>Page 5</h1>
-                        <h1>생성된 자소서</h1>
-
+                        <CommonButton
+                            isReady={true}
+                            onClick={() => {
+                                setStep(step - 1)
+                            }
+                            }
+                        >
+                            자기소개서 양식 수정
+                        </CommonButton>
+                        <WritingBoxDivider />
+                        {
+                            generatedResume !== '' &&
+                            <WritingBox>
+                                <WritingBoxTitle>{"🧾 AI가 생성한 "}<WritingBoxTitleHighlightSpan>{name}</WritingBoxTitleHighlightSpan>{"님을 위한 자기소개서입니다."}</WritingBoxTitle>
+                                {/* 복사 버튼
+                                스크롤 가능하다는 문구 추가 */}
+                                <GeneratedResumeDiv>
+                                    <TextField
+                                        id="generatedResume"
+                                        fullWidth
+                                        multiline
+                                        rows={30}
+                                        variant="outlined"
+                                        value={generatedResume}
+                                        onChange={handleGeneratedResumeChange}
+                                    />
+                                </GeneratedResumeDiv>
+                            </WritingBox>
+                        }
                     </CommonBox>
                 }
             </WrapBox>
@@ -330,6 +684,12 @@ const CommonButton = Styled.div<{ isReady: boolean }>`
 const WritingDiv = Styled.div`
     margin-bottom: 30px;
 `
+const WritingTextDiv = Styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+`
 const WritingText = Styled.div`
     font-size: 16px;
     color: #000;
@@ -349,6 +709,117 @@ const WritingBoxTitle = Styled.div`
     font-size: 23px;
     font-weight: bold;
     margin-bottom: 40px;
+`
+const WritingBoxTitleHighlightSpan = Styled.span`
+    font-size: 25px;
+    color: #428d93;
+`
+const WritingBoxHeaderDiv = Styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+`
+const WritingBoxHeader = Styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+`
+const WritingCompanyText = Styled.div`
+    font-size: 22px;
+    font-weight: bold;
+    color: #428d93;
+`
+const WritingJobText = Styled.div`
+    font-size: 18px;
+    color: #428d93;
+`
+const ModifyingButtonDiv = Styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    padding: 2px 5px;
+    background-color: #fff;
+    color: #999999;
+    border: 1px solid #999999;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover {
+        -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
+        box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
+    }
+`
+const ModifyingIconDiv = Styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    font-size: 20px;
+    color: inherit;
+`
+const ModifyingText = Styled.div`
+    font-size: 14px;
+    color: inherit;
+`
+const WritingBoxDivider = Styled.div`
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+`
+const RadioGroupDiv = Styled.div`
+    width: 100%;
+    margin-bottom: 30px;
+`
+const AddButton = Styled.button<{ disabled: boolean }>`
+    height: 50px;
+    margin-bottom: 20px;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: ${props => props.disabled ? '#B1B1B1' : '#007BFF'};
+    color: ${props => props.disabled ? '#FFF' : '#FFF'};
+    font-size: 16px;
+    font-weight: 700;
+    padding: 0 16px;
+    transition: background-color .3s ease, color .3s ease;
+    cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+
+    &:hover {
+        color: ${props => props.disabled ? '#FFF' : '#007BFF'};
+        background-color: ${props => props.disabled ? '#B1B1B1' : '#ffffff'};
+        border: ${props => props.disabled ? 'none' : '1px solid #007BFF'};
+    }
+`
+const DeleteButton = Styled.button`
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #888;
+    border: solid 1px #888;
+    border-radius: 5px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: color .3s ease;
+
+    &:hover {
+        border: none;
+        color: #fff;
+        background-color: #f00;
+        font-weight: bold;
+        padding: 3px 8px;
+    }
+`
+const GeneratedResumeDiv = Styled.div`
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
 `
 
 export default Create;
