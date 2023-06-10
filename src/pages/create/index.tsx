@@ -6,6 +6,8 @@ import { useRouter } from 'next/router';
 import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
 import LoadingPopup from '@/components/popup/LoadingPopup';
 
+import TextField from '@mui/material/TextField';
+
 import temp_intro from '@/assets/images/temp_introduction.gif'
 
 const Create = () => {
@@ -13,6 +15,25 @@ const Create = () => {
 
     const [step, setStep] = useState<number>(0)
     const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    // step 1
+    const [company, setCompany] = useState<string>('')
+    const [companyDescription, setCompanyDescription] = useState<string>('')
+    const [job, setJob] = useState<string>('')
+    const [jobDescription, setJobDescription] = useState<string>('')
+    
+    const handleCompanyChange = (e: any) => {
+        setCompany(e.target.value)
+    }
+    const handleCompanyDescriptionChange = (e: any) => {
+        setCompanyDescription(e.target.value)
+    }
+    const handleJobChange = (e: any) => {
+        setJob(e.target.value)
+    }
+    const handleJobDescriptionChange = (e: any) => {
+        setJobDescription(e.target.value)
+    }
 
     useEffect(() => {
         console.log('location', location)
@@ -58,25 +79,85 @@ const Create = () => {
                 }
                 {
                     step === 1 &&
-                    <CommonBox>
-                        <button onClick={() => {
-                            setStep(step - 1)
-                        }}>뒤로가기</button>
-                        <h1>Page 2</h1>
-                        <h1>회사 정보 입력</h1>
-                        <h1>회사 이름 *</h1>
-                        <h1>회사 설명 * (짧게)</h1>
-                        <h1>지원하는 직무 내용 *(3줄까지 추가 가능)</h1>
-                        <CommonButton
-                            isReady={true}
-                            onClick={() => {
+                    <CommonBox
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            if (company.length > 0 && job.length > 0) {
+                                setStep(step - 1)
+                            }
+                        }
+                    }}
+                >
+                        <WritingBox>
+                            <WritingBoxTitle>{'🏢 지원하는 회사에 대한 정보를 입력해주세요.'}</WritingBoxTitle>
+                    <WritingDiv>
+                        <WritingText><WritingCompanyTextSpan>{'회사의 이름(필수)'}</WritingCompanyTextSpan></WritingText>
+                        <TextField
+                            id="company"
+                            fullWidth
+                            variant="outlined"
+                            placeholder='현대자동차'
+                            value={company}
+                            onChange={handleCompanyChange}
+                        />
+                    </WritingDiv>
+                    {
+                        company !== '' &&
+                        <WritingDiv>
+                            <WritingText><WritingCompanyTextSpan>{'회사 설명'}</WritingCompanyTextSpan>{'(선택)'}</WritingText>
+                            <TextField
+                                id="companyDescription"
+                                fullWidth
+                                variant="outlined"
+                                multiline
+                                rows={3}
+                                placeholder='현대자동차는 대한민국의 글로벌 자동차 제조 기업으로, 혁신적인 디자인과 첨단 기술을 통해 고품질의 차량을 제공하며, 전 세계적으로 신뢰와 인기를 얻고 있는 브랜드입니다.'
+                                value={companyDescription}
+                                onChange={handleCompanyDescriptionChange}
+                            />
+                        </WritingDiv>
+                    }
+                    <WritingDiv>
+                        <WritingText><WritingCompanyTextSpan>{'직무의 이름(필수)'}</WritingCompanyTextSpan></WritingText>
+                        <TextField
+                            id="job"
+                            fullWidth
+                            variant="outlined"
+                            placeholder='글로벌 상용차 신사업 프로젝트 기획/운영'
+                            value={job}
+                            onChange={handleJobChange}
+                        />
+                    </WritingDiv>
+                    {
+                        job !== '' &&
+                        <WritingDiv>
+                            <WritingText><WritingCompanyTextSpan>{'직무 설명'}</WritingCompanyTextSpan>{'(선택)'}</WritingText>
+                            <TextField
+                                id="jobDescription"
+                                fullWidth
+                                variant="outlined"
+                                multiline
+                                rows={3}
+                                placeholder='국내외 상용차(버스 / 트럭 등) 신사업 및 제휴 전략 기획과 신사업 프로젝트 런칭 / 운영 / 관리, 글로벌 생산 거점을 확용한 사업 모델을 분석하고 개발하는 업무를 수행합니다.'
+                                value={jobDescription}
+                                onChange={handleJobDescriptionChange}
+                            />
+                        </WritingDiv>
+                    }
+                    </WritingBox>
+                    
+                    <CommonButton
+                        isReady={company !== '' && job !== '' ? true : false}
+                        onClick={() => {
+                            if (company !== '' && job !== '') {
                                 setStep(step + 1)
                             }
-                            }
-                        >
-                            다음
-                        </CommonButton>
-                    </CommonBox>
+                        }
+                        }
+                    >
+                        자기소개서 작성 시작
+                    </CommonButton>
+                </CommonBox>
                 }
                 {
                     step === 2 &&
@@ -209,7 +290,7 @@ const IntroButton = Styled.button`
     transition: background-color .3s ease, color .3s ease;
     cursor: pointer;
     &:hover {
-    color: #007BFF;
+        color: #007BFF;
         background-color: #ffffff;
         border: 1px solid #007BFF;
     }
@@ -245,6 +326,29 @@ const CommonButton = Styled.div<{ isReady: boolean }>`
         -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px; 
         box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
     }
+`
+const WritingDiv = Styled.div`
+    margin-bottom: 30px;
+`
+const WritingText = Styled.div`
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 15px;
+`
+const WritingCompanyTextSpan = Styled.span`
+    font-size: 17px;
+    color: #428d93;
+    font-weight: bold;
+`
+const WritingBox = Styled.div`
+    width: 100%;
+    text-align: left;
+    padding: 20px;
+`
+const WritingBoxTitle = Styled.div`
+    font-size: 23px;
+    font-weight: bold;
+    margin-bottom: 40px;
 `
 
 export default Create;
