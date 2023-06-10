@@ -6,6 +6,9 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 
 import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
+
+import temp_intro from '@/assets/images/temp_introduction.gif'
+
 import TextField from '@mui/material/TextField';
 import LinearProgress from '@mui/material/LinearProgress';
 
@@ -14,9 +17,6 @@ import FiberNewRoundedIcon from '@mui/icons-material/FiberNewRounded';
 import SaveAltRoundedIcon from '@mui/icons-material/SaveAltRounded';
 import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import AppRegistrationRoundedIcon from '@mui/icons-material/AppRegistrationRounded';
-import CodeOffRoundedIcon from '@mui/icons-material/CodeOffRounded';
-import CodeRoundedIcon from '@mui/icons-material/CodeRounded';
 
 interface Tag {
     id: string;
@@ -30,9 +30,12 @@ interface Props {
 const Write = () => {
     const router = useRouter()
 
-    const timerRef = useRef<any>(null);
-    const progressRef = useRef<any>(() => { });
+    const timerRef = useRef<any>(null)
+    const progressRef = useRef<any>(() => { })
 
+    const [step, setStep] = useState<number>(0)
+
+    // step 1
     const [company, setCompany] = useState<string>('')
     const [job, setJob] = useState<string>('')
     const [isWritingReady, setIsWritingReady] = useState<boolean>(false)
@@ -142,10 +145,6 @@ const Write = () => {
     }
 
     useEffect(() => {
-        console.log('recommendation: ', recommendation)
-    }, [recommendation])
-
-    useEffect(() => {
         if (isAIReady === false) return
         const curResume = writingResumeList[writingResumeListIndex]
         if (curResume === null || curResume === undefined || curResume.length < 10) return
@@ -164,6 +163,17 @@ const Write = () => {
             }
         };
     }, [writingResumeList])
+
+    useEffect(() => {
+        const { query } = router;
+        const stepValue = query.step;
+
+        if (stepValue === '1') {
+            setStep(1)
+        } else {
+            setStep(0)
+        }
+    }, [router])
 
     useEffect(() => {
         progressRef.current = () => {
@@ -199,260 +209,286 @@ const Write = () => {
                 <Inner_TopAppBar_Home />
             }
             <WrapBox>
-                <WritingResumeFunctionBox>
-                    <FunctionButtonDiv onClick={() => {
-                    }}>
-                        <FunctionIconDiv>
-                            <FolderCopyRoundedIcon color='inherit' fontSize='inherit' />
-                        </FunctionIconDiv>
-                        <FunctionText>자소서 목록</FunctionText>
-                    </FunctionButtonDiv>
-                    <FunctionButtonDiv onClick={() => {
-                    }}>
-                        <FunctionIconDiv>
-                            <FiberNewRoundedIcon color='inherit' fontSize='inherit' />
-                        </FunctionIconDiv>
-                        <FunctionText>새 자소서</FunctionText>
-                    </FunctionButtonDiv>
-                    <FunctionButtonDiv onClick={() => {
-                    }}>
-                        <FunctionIconDiv>
-                            <ImportExportRoundedIcon color='inherit' fontSize='inherit' />
-                        </FunctionIconDiv>
-                        <FunctionText>내보내기</FunctionText>
-                    </FunctionButtonDiv>
-                </WritingResumeFunctionBox>
-                <WritingResumeBox>
-                    {
-                        isWritingReady === false ?
-                            <WritingCompanyBox
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        if (company.length > 0 && job.length > 0) {
-                                            setIsWritingReady(true)
-                                        }
-                                    }
-                                }}
+                {
+                    step === 0 &&
+                    <Box>
+                        <IntroBox alignDirection='left'>
+                            <IntroTitleTag>자소서 문장 추천</IntroTitleTag>
+                            <IntroTitle>AI가 당신의 자소서의 다음 문장을 추천해드립니다</IntroTitle>
+                            <IntroDescription>작성 중인 자기소개서와 제공하신 회사 정보, 개인 정보를 기반으로, AI가 다음 문장을 창의적이면서도 효과적으로 추천해드립니다. 당신의 자소서를 한 단계 업그레이드 시켜보세요.</IntroDescription>
+                            <IntroButton
+                                onClick={() => {
+                                    setStep(step + 1)
+                                }
+                                }
                             >
-                                <WritingCompanyDiv>
-                                    <WritingCompanyText>{'지원하는 '}<WritingCompanyTextSpan>{'회사의 이름'}</WritingCompanyTextSpan>{'을 입력해주세요.'}</WritingCompanyText>
-                                    <TextField
-                                        id="company"
-                                        fullWidth
-                                        variant="outlined"
-                                        placeholder='현대자동차'
-                                        value={company}
-                                        onChange={handleCompanyChange}
-                                    />
-                                </WritingCompanyDiv>
-                                <WritingCompanyDiv>
-                                    <WritingCompanyText>{'지원하는 '}<WritingCompanyTextSpan>{'직무의 이름'}</WritingCompanyTextSpan>{'을 입력해주세요.'}</WritingCompanyText>
-                                    <TextField
-                                        id="job"
-                                        fullWidth
-                                        variant="outlined"
-                                        placeholder='글로벌 상용차 신사업 프로젝트 기획/운영'
-                                        value={job}
-                                        onChange={handleJobChange}
-                                    />
-                                </WritingCompanyDiv>
-                                <CommonButton
-                                    isReady={company !== '' && job !== '' ? true : false}
-                                    onClick={() => {
-                                        if (company !== '' && job !== '') {
-                                            setIsWritingReady(true)
-                                        }
-                                    }
-                                    }
-                                >
-                                    자기소개서 작성 시작
-                                </CommonButton>
-                            </WritingCompanyBox>
-                            :
-                            <>
-                                {
-                                    company !== null && company !== undefined && company !== '' &&
-                                    job !== null && job !== undefined && job !== '' &&
-                                    <>
-                                        <WritingCompanyBoxHeaderDiv>
-                                            <WritingResumeCompanyBox>
-                                                <WritingResumeCompanyText>{company}</WritingResumeCompanyText>
-                                                <WritingResumeJobText>{job}</WritingResumeJobText>
-                                                <ModifyingCompanyButtonDiv onClick={() => {
-                                                    setIsWritingReady(false)
-                                                }}>
-                                                    <ModifyingCompanyIconDiv>
-                                                        <EditRoundedIcon color='inherit' fontSize='inherit' />
-                                                    </ModifyingCompanyIconDiv>
-                                                    <ModifyingCompanyText>수정</ModifyingCompanyText>
-                                                </ModifyingCompanyButtonDiv>
-                                            </WritingResumeCompanyBox>
-                                            <WritingResumeSaveButtonDiv>
-                                                <SaveIconDiv>
-                                                    <SaveAltRoundedIcon color='inherit' fontSize='inherit' />
-                                                </SaveIconDiv>
-                                                <WritingResumeSaveButtonText>저장하기</WritingResumeSaveButtonText>
-                                            </WritingResumeSaveButtonDiv>
-                                        </WritingCompanyBoxHeaderDiv>
-                                        <WritingResumeBoxDivider />
-                                        <WritingResumeTextFieldsBox>
-                                            <ResumePageDiv>
-                                                {
-                                                    writingResumeList.map((item: any, index: number) => {
-                                                        return (
-                                                            <ResumePageButtonDiv
-                                                                key={index}
-                                                                isSelected={writingResumeListIndex === index ? true : false}
-                                                                onClick={() => {
-                                                                    setWritingResumeListIndex(index)
-                                                                }}
-                                                            >
-                                                                <ResumePageButtonText>{index + 1}</ResumePageButtonText>
-                                                            </ResumePageButtonDiv>
-                                                        )
-                                                    })
+                                자기소개서 작성 시작
+                            </IntroButton>
+                        </IntroBox>
+                        <IntroImgDiv>
+                            <IntroImg src={temp_intro} alt="IntroImg" />
+                        </IntroImgDiv>
+                    </Box>
+                }
+                {
+                    step === 1 &&
+                    <>
+                        <WritingResumeFunctionBox>
+                            <FunctionButtonDiv onClick={() => {
+                            }}>
+                                <FunctionIconDiv>
+                                    <FolderCopyRoundedIcon color='inherit' fontSize='inherit' />
+                                </FunctionIconDiv>
+                                <FunctionText>자소서 목록</FunctionText>
+                            </FunctionButtonDiv>
+                            <FunctionButtonDiv onClick={() => {
+                            }}>
+                                <FunctionIconDiv>
+                                    <FiberNewRoundedIcon color='inherit' fontSize='inherit' />
+                                </FunctionIconDiv>
+                                <FunctionText>새 자소서</FunctionText>
+                            </FunctionButtonDiv>
+                            <FunctionButtonDiv onClick={() => {
+                            }}>
+                                <FunctionIconDiv>
+                                    <ImportExportRoundedIcon color='inherit' fontSize='inherit' />
+                                </FunctionIconDiv>
+                                <FunctionText>내보내기</FunctionText>
+                            </FunctionButtonDiv>
+                        </WritingResumeFunctionBox>
+                        <WritingResumeBox>
+                            {
+                                isWritingReady === false ?
+                                    <WritingCompanyBox
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                if (company.length > 0 && job.length > 0) {
+                                                    setIsWritingReady(true)
                                                 }
-                                                <ResumePageButtonDiv
-                                                    isSelected={false}
-                                                    onClick={() => {
-                                                        const newWritingResumeList = writingResumeList ? writingResumeList : []
-                                                        newWritingResumeList.push({
-                                                            question: '',
-                                                            answer: '',
-                                                        })
-                                                        setWritingResumeList(newWritingResumeList)
-                                                        setWritingResumeListIndex(newWritingResumeList.length - 1)
-                                                    }}
-                                                >
-                                                    <ResumePageButtonText>+</ResumePageButtonText>
-                                                </ResumePageButtonDiv>
-                                            </ResumePageDiv>
+                                            }
+                                        }}
+                                    >
+                                        <WritingCompanyDiv>
+                                            <WritingCompanyText>{'지원하는 '}<WritingCompanyTextSpan>{'회사의 이름'}</WritingCompanyTextSpan>{'을 입력해주세요.'}</WritingCompanyText>
                                             <TextField
-                                                id="resumeQuestion"
+                                                id="company"
                                                 fullWidth
-                                                multiline
-                                                rows={3}
-                                                placeholder='자기소개서 항목 혹은 질문을 입력하세요.'
-                                                value={writingResumeList[writingResumeListIndex]?.question}
-                                                variant="standard"
-                                                onChange={handleResumeQuestionChange}
-                                                InputProps={{
-                                                    disableUnderline: true,
-                                                }}
+                                                variant="outlined"
+                                                placeholder='현대자동차'
+                                                value={company}
+                                                onChange={handleCompanyChange}
                                             />
-                                        </WritingResumeTextFieldsBox>
-                                        <WritingResumeBoxDivider />
-                                        <WritingResumeTextFieldsBox>
+                                        </WritingCompanyDiv>
+                                        <WritingCompanyDiv>
+                                            <WritingCompanyText>{'지원하는 '}<WritingCompanyTextSpan>{'직무의 이름'}</WritingCompanyTextSpan>{'을 입력해주세요.'}</WritingCompanyText>
                                             <TextField
-                                                id="writingResume"
+                                                id="job"
                                                 fullWidth
-                                                multiline
-                                                rows={13}
-                                                placeholder='자기소개서 내용을 입력하세요.'
-                                                variant="standard"
-                                                value={writingResumeList[writingResumeListIndex]?.answer}
-                                                onChange={handleWritingResumeChange}
-                                                onKeyDown={(e) => {
-                                                    if (e.key === 'Tab') {
-                                                        e.preventDefault();
-                                                        if (recommendation !== null && recommendation !== undefined && recommendation.length > 0) {
-                                                            setWritingResumeList(writingResumeList.map((item: any, index: number) => {
-                                                                if (index === writingResumeListIndex) {
-                                                                    return {
-                                                                        ...item,
-                                                                        answer: item.answer + recommendation
-                                                                    }
-                                                                } else {
-                                                                    return item
-                                                                }
-                                                            }))
+                                                variant="outlined"
+                                                placeholder='글로벌 상용차 신사업 프로젝트 기획/운영'
+                                                value={job}
+                                                onChange={handleJobChange}
+                                            />
+                                        </WritingCompanyDiv>
+                                        <CommonButton
+                                            isReady={company !== '' && job !== '' ? true : false}
+                                            onClick={() => {
+                                                if (company !== '' && job !== '') {
+                                                    setIsWritingReady(true)
+                                                }
+                                            }
+                                            }
+                                        >
+                                            자기소개서 작성 시작
+                                        </CommonButton>
+                                    </WritingCompanyBox>
+                                    :
+                                    <>
+                                        {
+                                            company !== null && company !== undefined && company !== '' &&
+                                            job !== null && job !== undefined && job !== '' &&
+                                            <>
+                                                <WritingCompanyBoxHeaderDiv>
+                                                    <WritingResumeCompanyBox>
+                                                        <WritingResumeCompanyText>{company}</WritingResumeCompanyText>
+                                                        <WritingResumeJobText>{job}</WritingResumeJobText>
+                                                        <ModifyingCompanyButtonDiv onClick={() => {
+                                                            setIsWritingReady(false)
+                                                        }}>
+                                                            <ModifyingCompanyIconDiv>
+                                                                <EditRoundedIcon color='inherit' fontSize='inherit' />
+                                                            </ModifyingCompanyIconDiv>
+                                                            <ModifyingCompanyText>수정</ModifyingCompanyText>
+                                                        </ModifyingCompanyButtonDiv>
+                                                    </WritingResumeCompanyBox>
+                                                    <WritingResumeSaveButtonDiv>
+                                                        <SaveIconDiv>
+                                                            <SaveAltRoundedIcon color='inherit' fontSize='inherit' />
+                                                        </SaveIconDiv>
+                                                        <WritingResumeSaveButtonText>저장하기</WritingResumeSaveButtonText>
+                                                    </WritingResumeSaveButtonDiv>
+                                                </WritingCompanyBoxHeaderDiv>
+                                                <WritingResumeBoxDivider />
+                                                <WritingResumeTextFieldsBox>
+                                                    <ResumePageDiv>
+                                                        {
+                                                            writingResumeList.map((item: any, index: number) => {
+                                                                return (
+                                                                    <ResumePageButtonDiv
+                                                                        key={index}
+                                                                        isSelected={writingResumeListIndex === index ? true : false}
+                                                                        onClick={() => {
+                                                                            setWritingResumeListIndex(index)
+                                                                        }}
+                                                                    >
+                                                                        <ResumePageButtonText>{index + 1}</ResumePageButtonText>
+                                                                    </ResumePageButtonDiv>
+                                                                )
+                                                            })
                                                         }
-                                                    }
-                                                }}
-                                                InputProps={{
-                                                    disableUnderline: true,
-                                                }}
-                                            />
-                                            <RecommendationDiv
-                                                isAIReady={isAIReady}
-                                            >
-                                                {
-                                                    isAIReady === true &&
-                                                    <RecommendationText
-                                                        isLoading={loading}
+                                                        <ResumePageButtonDiv
+                                                            isSelected={false}
+                                                            onClick={() => {
+                                                                const newWritingResumeList = writingResumeList ? writingResumeList : []
+                                                                newWritingResumeList.push({
+                                                                    question: '',
+                                                                    answer: '',
+                                                                })
+                                                                setWritingResumeList(newWritingResumeList)
+                                                                setWritingResumeListIndex(newWritingResumeList.length - 1)
+                                                            }}
+                                                        >
+                                                            <ResumePageButtonText>+</ResumePageButtonText>
+                                                        </ResumePageButtonDiv>
+                                                    </ResumePageDiv>
+                                                    <TextField
+                                                        id="resumeQuestion"
+                                                        fullWidth
+                                                        multiline
+                                                        rows={3}
+                                                        placeholder='자기소개서 항목 혹은 질문을 입력하세요.'
+                                                        value={writingResumeList[writingResumeListIndex]?.question}
+                                                        variant="standard"
+                                                        onChange={handleResumeQuestionChange}
+                                                        InputProps={{
+                                                            disableUnderline: true,
+                                                        }}
+                                                    />
+                                                </WritingResumeTextFieldsBox>
+                                                <WritingResumeBoxDivider />
+                                                <WritingResumeTextFieldsBox>
+                                                    <TextField
+                                                        id="writingResume"
+                                                        fullWidth
+                                                        multiline
+                                                        rows={13}
+                                                        placeholder='자기소개서 내용을 입력하세요.'
+                                                        variant="standard"
+                                                        value={writingResumeList[writingResumeListIndex]?.answer}
+                                                        onChange={handleWritingResumeChange}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Tab') {
+                                                                e.preventDefault();
+                                                                if (recommendation !== null && recommendation !== undefined && recommendation.length > 0) {
+                                                                    setWritingResumeList(writingResumeList.map((item: any, index: number) => {
+                                                                        if (index === writingResumeListIndex) {
+                                                                            return {
+                                                                                ...item,
+                                                                                answer: item.answer + recommendation
+                                                                            }
+                                                                        } else {
+                                                                            return item
+                                                                        }
+                                                                    }))
+                                                                }
+                                                            }
+                                                        }}
+                                                        InputProps={{
+                                                            disableUnderline: true,
+                                                        }}
+                                                    />
+                                                    <RecommendationDiv
+                                                        isAIReady={isAIReady}
                                                     >
                                                         {
-                                                            loading === true &&
-                                                            <RecommendationLoadingDiv>
-                                                                <RecommendationLoadingIconDiv>
-                                                                    <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} color='success' />
-                                                                </RecommendationLoadingIconDiv>
-                                                                <RecommendationLoadingText>적절한 문장을 AI 작성 중입니다</RecommendationLoadingText>
-                                                            </RecommendationLoadingDiv>
+                                                            isAIReady === true &&
+                                                            <RecommendationText
+                                                                isLoading={loading}
+                                                            >
+                                                                {
+                                                                    loading === true &&
+                                                                    <RecommendationLoadingDiv>
+                                                                        <RecommendationLoadingIconDiv>
+                                                                            <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} color='success' />
+                                                                        </RecommendationLoadingIconDiv>
+                                                                        <RecommendationLoadingText>적절한 문장을 AI 작성 중입니다</RecommendationLoadingText>
+                                                                    </RecommendationLoadingDiv>
+                                                                }
+                                                                <RecommendationGuidanceText
+                                                                    isLoading={loading}
+                                                                >
+                                                                    {`추천된 답변을 사용하려면 Tab키를 눌러주세요.`}
+                                                                </RecommendationGuidanceText>
+                                                                {recommendation}
+                                                            </RecommendationText>
                                                         }
-                                                        <RecommendationGuidanceText
-                                                            isLoading={loading}
+                                                        <SwitchContainer onClick={() => {
+                                                            setIsAIReady(!isAIReady)
+                                                        }}>
+                                                            <SwitchSlider isOn={isAIReady} />
+                                                            <SwitchText isOn={isAIReady}>{isAIReady ? 'AI 작성 OFF' : 'AI 작성 ON'}</SwitchText>
+                                                        </SwitchContainer>
+                                                    </RecommendationDiv>
+                                                </WritingResumeTextFieldsBox>
+                                                <WritingResumeBoxDivider />
+                                                <WritingResumeCharacterNumBox>
+                                                    <WritingResumeCharacterNumDiv>
+                                                        <WritingResumeCharacterNumText
+                                                            isExceed={characterPercentage >= 100 ? true : false}
+                                                        >{writingResumeList[writingResumeListIndex]?.answer.length}</WritingResumeCharacterNumText>
+                                                        <WritingResumeCharacterNumText
+                                                            isExceed={characterPercentage >= 100 ? true : false}
+                                                        >{' / '}</WritingResumeCharacterNumText>
+                                                        {
+                                                            isMaxCharReady === false ?
+                                                                <WritingResumeCharacterNumText
+                                                                    isExceed={characterPercentage >= 100 ? true : false}
+                                                                >{maxCharacterNum}</WritingResumeCharacterNumText>
+                                                                :
+                                                                <CharacterNumTextFieldDiv>
+                                                                    <TextField
+                                                                        variant="outlined"
+                                                                        label="최대 글자 수"
+                                                                        fullWidth
+                                                                        value={maxCharacterNum}
+                                                                        onChange={handleMaxCharacterNumChange}
+                                                                    />
+                                                                </CharacterNumTextFieldDiv>
+                                                        }
+                                                        <WritingResumeCharacterNumText
+                                                            isExceed={characterPercentage >= 100 ? true : false}
+                                                        >자</WritingResumeCharacterNumText>
+                                                        <WritingResumeCharacterNumSettingButtonDiv
+                                                            onClick={() => {
+                                                                setIsMaxCharReady(!isMaxCharReady)
+                                                            }}
                                                         >
-                                                            {`추천된 답변을 사용하려면 Tab키를 눌러주세요.`}
-                                                        </RecommendationGuidanceText>
-                                                        {recommendation}
-                                                    </RecommendationText>
-                                                }
-                                                <SwitchContainer onClick={() => {
-                                                    setIsAIReady(!isAIReady)
-                                                }}>
-                                                    <SwitchSlider isOn={isAIReady} />
-                                                    <SwitchText isOn={isAIReady}>{isAIReady ? 'AI 작성 OFF' : 'AI 작성 ON'}</SwitchText>
-                                                </SwitchContainer>
-                                            </RecommendationDiv>
-                                        </WritingResumeTextFieldsBox>
-                                        <WritingResumeBoxDivider />
-                                        <WritingResumeCharacterNumBox>
-                                            <WritingResumeCharacterNumDiv>
-                                                <WritingResumeCharacterNumText
-                                                    isExceed={characterPercentage >= 100 ? true : false}
-                                                >{writingResumeList[writingResumeListIndex]?.answer.length}</WritingResumeCharacterNumText>
-                                                <WritingResumeCharacterNumText
-                                                    isExceed={characterPercentage >= 100 ? true : false}
-                                                >{' / '}</WritingResumeCharacterNumText>
-                                                {
-                                                    isMaxCharReady === false ?
-                                                    <WritingResumeCharacterNumText
-                                                        isExceed={characterPercentage >= 100 ? true : false}
-                                                    >{maxCharacterNum}</WritingResumeCharacterNumText>
-                                                    :
-                                                    <CharacterNumTextFieldDiv>
-                                                        <TextField
-                                                            variant="outlined"
-                                                            label="최대 글자 수" 
-                                                            fullWidth
-                                                            value={maxCharacterNum}
-                                                            onChange={handleMaxCharacterNumChange}
-                                                        />
-                                                    </CharacterNumTextFieldDiv>
-                                                }
-                                                <WritingResumeCharacterNumText
-                                                    isExceed={characterPercentage >= 100 ? true : false}
-                                                >자</WritingResumeCharacterNumText>
-                                                <WritingResumeCharacterNumSettingButtonDiv
-                                                    onClick={() => {
-                                                        setIsMaxCharReady(!isMaxCharReady)
-                                                    }}
-                                                >
-                                                    {'글자 수 설정'}
-                                                </WritingResumeCharacterNumSettingButtonDiv>
-                                            </WritingResumeCharacterNumDiv>
-                                            <WritingResumeProgressBarDiv>
-                                                <ProgressContainer>
-                                                    <ProgressBar percentage={characterPercentage > 100 ? 100 : characterPercentage} />
-                                                </ProgressContainer>
-                                            </WritingResumeProgressBarDiv>
-                                        </WritingResumeCharacterNumBox>
+                                                            {'글자 수 설정'}
+                                                        </WritingResumeCharacterNumSettingButtonDiv>
+                                                    </WritingResumeCharacterNumDiv>
+                                                    <WritingResumeProgressBarDiv>
+                                                        <ProgressContainer>
+                                                            <ProgressBar percentage={characterPercentage > 100 ? 100 : characterPercentage} />
+                                                        </ProgressContainer>
+                                                    </WritingResumeProgressBarDiv>
+                                                </WritingResumeCharacterNumBox>
+                                            </>
+                                        }
                                     </>
-                                }
-                            </>
-                    }
-                </WritingResumeBox>
+                            }
+                        </WritingResumeBox>
+                    </>
+                }
             </WrapBox>
         </div>
     )
@@ -465,6 +501,84 @@ const WrapBox = Styled.div`
     padding-top: calc(80px + 100px);
     padding-bottom: 100px;
     min-height: 100vh;
+`
+const Box = Styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 30px;
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
+`
+const IntroImgDiv = Styled.div`
+    flex: 1;
+    align-items: center;
+    display: flex;
+    @media (max-width: 768px) {
+        width: 100%;
+    }
+`
+const IntroImg = Styled(Image)`
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px; 
+    box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
+    border-radius: 10px;
+`
+const IntroBox = Styled.div<{ alignDirection: string }>`
+    display: flex;
+    flex-direction: column;
+    justify-content: ${(props) => (props.alignDirection === 'left' ? 'flex-start' : 'flex-end')};
+    align-items: ${(props) => (props.alignDirection === 'left' ? 'flex-start' : 'flex-end')};
+    text-align: ${(props) => (props.alignDirection === 'left' ? 'left' : 'right')};
+    flex: 1;
+    padding: 1em;
+    @media (max-width: 768px) {
+        justify-content: center;
+        align-items: center;
+    }
+`
+const IntroTitleTag = Styled.div`
+    color: #14c2ad;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 20px;
+`
+const IntroTitle = Styled.div`
+    font-size: 40px;
+    line-height: 40px;
+    font-weight: bold;
+    margin-bottom: 32px;
+`
+const IntroDescription = Styled.div`
+    font-size: 20px;
+    color: #4a4a4a;
+    line-height: 28px;
+    margin-bottom: 32px;
+`
+const IntroButton = Styled.div`
+    height: 50px;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #007BFF;
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 0 16px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 15px 3px; 
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 15px 3px;
+    transition: background-color .3s ease, color .3s ease;
+    cursor: pointer;
+    &:hover {
+        color: #007BFF;
+        background-color: #ffffff;
+        border: 1px solid #007BFF;
+    }
 `
 const WritingResumeFunctionBox = Styled.div`
     display: flex;
@@ -825,14 +939,14 @@ const WritingResumeCharacterNumDiv = Styled.div`
     align-items: center;
     gap: 5px;
 `
-const WritingResumeCharacterNumText = Styled.div<{isExceed: boolean}>`
+const WritingResumeCharacterNumText = Styled.div<{ isExceed: boolean }>`
     ${props => props.isExceed === true ? 'color: #fa2a31; font-size: 20px; font-weight: bold' : 'color: #666; font-size: 18px;'}
 `
 const CharacterNumTextFieldDiv = Styled.div`
     width: 100px;
     margin-left: 10px;
     margin-right: 10px;
-`    
+`
 const WritingResumeCharacterNumSettingButtonDiv = Styled.div`
     margin-left: 10px;
     display: flex;
@@ -860,7 +974,7 @@ const ProgressContainer = Styled.div`
   background-color: #f3f3f3;
   border-radius: 5px;
 `
-const ProgressBar = Styled.div<{percentage: number}>`
+const ProgressBar = Styled.div<{ percentage: number }>`
   height: 20px;
   width: ${(props) => (props.percentage ? `${props.percentage}%` : '0%')};
   background-color: #6bb9bf;

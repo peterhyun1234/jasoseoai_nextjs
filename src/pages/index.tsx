@@ -8,13 +8,8 @@ import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
 const Home = () => {
     const router = useRouter()
 
-    const onClickLogo = () => {
-        router.push('/')
-    }
-
     useEffect(() => {
-        console.log('location', location)
-        console.log('router', router)
+        //TODO: https://peterjeon.co.kr/ 처럼 스크롤에 따른 다양한 이벤트 ㄱㄱ
     }, [])
 
     return (
@@ -148,7 +143,9 @@ const WrapBox = Styled.div`
     width: 100%;
     display: inline-block;
     max-width: 1000px;
-    padding-top: 80px;
+    padding-top: calc(80px + 100px);
+    padding-bottom: 100px;
+    min-height: 100vh;
 `
 
 export default Home;

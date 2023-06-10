@@ -26,6 +26,7 @@ const Inner_TopAppBar_Home = () => {
     }
 
     useEffect(() => {
+        //TODO: 스크롤 이벤트, 리사이즈 이벤트 media query로 대체
         setInnerWidth(window.innerWidth)
         setPageYOffset(window.pageYOffset)
         window.addEventListener('scroll', handleScroll)
@@ -61,7 +62,7 @@ const Inner_TopAppBar_Home = () => {
                             <MenuBtn
                                 isSelected={router.pathname === '/write'}
                                 onClick={() => router.push('/write')}
-                            >자소서 작성</MenuBtn>
+                            >자소서 문장 추천</MenuBtn>
                             <MenuBtn
                                 isSelected={router.pathname === '/correct'}
                                 // onClick={() => router.push('/correct')}
@@ -73,6 +74,11 @@ const Inner_TopAppBar_Home = () => {
                             <SignBtn onClick={() => router.push('/signIn')}>
                                 <p>로그인</p>
                             </SignBtn>
+                            <ContactBtn onClick={() => {
+                                window.open('https://peterjeon.co.kr', '_blank')
+                            }}>
+                                <p>Contact</p>
+                            </ContactBtn>
                         </AppBarRightDiv>
                     </AppBarDetailDiv>
             }
@@ -109,7 +115,7 @@ const AppBarLeftDiv = Styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: 15px;
+    gap: 25px;
 `
 const AppBarCenterDiv = Styled.div`
     display: flex;
@@ -123,12 +129,14 @@ const AppBarRightDiv = Styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    gap: 25px;
 `
 const MenuBtn = Styled.div<{ isSelected: boolean }>`
     ${props => props.isSelected === true && `background: linear-gradient(65deg, rgba(153,196,0,1) 0%, rgba(1,99,49,1) 33%, rgba(25,153,149,1) 70%, rgba(2,129,154,1) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;`}
     font-size: 16px;
     font-weight: 500;
     color: #333;
+    word-spacing: -2px;
     cursor: pointer;
     &:hover {
         font-size: 17px;
@@ -140,11 +148,35 @@ const MenuBtn = Styled.div<{ isSelected: boolean }>`
 `
 const SignBtn = Styled.div`
     padding: 7px 20px;
-    font-size: 19px;
+    font-size: 15px;
     font-weight: 600;
     color: #428d93;
     border: 2px solid #428d93;
-    border-radius: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color .3s ease, color .3s ease;
+
+    &:hover {
+        background-color: #428d93;
+        color: #fff;
+    }
+`
+const ContactBtn = Styled.div`
+    padding: 7px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    background-color: #e7bcbc;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color .3s ease, color .3s ease;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 15px 3px; 
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 15px 3px;
+
+    &:hover {
+        -webkit-box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 15px 3px; 
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 15px 3px;
+    }
 `
 
 export default Inner_TopAppBar_Home;

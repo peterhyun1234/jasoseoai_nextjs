@@ -2,6 +2,7 @@ import { use, useEffect, useState } from 'react';
 import Styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useCopyToClipboard } from 'react-use';
 
 import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
 import LoadingPopup from '@/components/popup/LoadingPopup';
@@ -13,8 +14,6 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 
-import SaveAltRoundedIcon from '@mui/icons-material/SaveAltRounded';
-import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 
 const placeholder = {
@@ -86,6 +85,14 @@ const Create = () => {
 
     // result
     const [generatedResume, setGeneratedResume] = useState<string>('')
+    const [isCopied, copyToClipboard] = useCopyToClipboard()
+
+    const handleCopyClick = () => {
+        copyToClipboard(generatedResume);
+        if (isCopied) {
+            alert('자기소개서가 복사되었습니다.')
+        }
+    }
 
     const handleCompanyChange = (e: any) => {
         setCompany(e.target.value)
@@ -163,9 +170,15 @@ const Create = () => {
     }
 
     useEffect(() => {
-        console.log('location', location)
-        console.log('router', router)
-    }, [])
+        const { query } = router;
+        const stepValue = query.step;
+
+        if (stepValue === '1') {
+            setStep(1)
+        } else {
+            setStep(0)
+        }
+    }, [router])
 
     return (
         <div style={{
@@ -199,7 +212,7 @@ const Create = () => {
                                 }
                                 }
                             >
-                                자기소개서 작성 시작
+                                자기소개서 생성 시작
                             </IntroButton>
                         </IntroBox>
                     </Box>
@@ -545,8 +558,7 @@ const Create = () => {
                             generatedResume !== '' &&
                             <WritingBox>
                                 <WritingBoxTitle>{"🧾 AI가 생성한 "}<WritingBoxTitleHighlightSpan>{name}</WritingBoxTitleHighlightSpan>{"님을 위한 자기소개서입니다."}</WritingBoxTitle>
-                                {/* 복사 버튼
-                                스크롤 가능하다는 문구 추가 */}
+                                <WritingBoxSubtitle>아래 박스를 스크롤하여 전체 내용을 확인하세요.</WritingBoxSubtitle>
                                 <GeneratedResumeDiv>
                                     <TextField
                                         id="generatedResume"
@@ -558,6 +570,7 @@ const Create = () => {
                                         onChange={handleGeneratedResumeChange}
                                     />
                                 </GeneratedResumeDiv>
+                                <CopyButton onClick={handleCopyClick}>자기소개서 내용 복사</CopyButton>
                             </WritingBox>
                         }
                     </CommonBox>
@@ -586,17 +599,19 @@ const Box = Styled.div`
 `
 const IntroImgDiv = Styled.div`
     flex: 1;
-    -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px; 
-    box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
-    border-radius: 10px;
+    align-items: center;
+    display: flex;
     @media (max-width: 768px) {
-    width: 100%;
+        width: 100%;
     }
 `
 const IntroImg = Styled(Image)`
     width: 100%;
     height: auto;
     aspect-ratio: 4 / 3;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px; 
+    box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
+    border-radius: 10px;
 `
 const IntroBox = Styled.div<{ alignDirection: string }>`
     display: flex;
@@ -629,7 +644,7 @@ const IntroDescription = Styled.div`
     line-height: 28px;
     margin-bottom: 32px;
 `
-const IntroButton = Styled.button`
+const IntroButton = Styled.div`
     height: 50px;
     border-radius: 50px;
     display: inline-flex;
@@ -641,6 +656,8 @@ const IntroButton = Styled.button`
     font-size: 16px;
     font-weight: 700;
     padding: 0 16px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 15px 3px; 
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 15px 3px;
     transition: background-color .3s ease, color .3s ease;
     cursor: pointer;
     &:hover {
@@ -713,6 +730,11 @@ const WritingBoxTitle = Styled.div`
 const WritingBoxTitleHighlightSpan = Styled.span`
     font-size: 25px;
     color: #428d93;
+`
+const WritingBoxSubtitle = Styled.div`
+    font-size: 16px;
+    color: #888;
+    margin-bottom: 20px;
 `
 const WritingBoxHeaderDiv = Styled.div`
     width: 100%;
@@ -820,6 +842,24 @@ const GeneratedResumeDiv = Styled.div`
     width: 100%;
     margin-top: 30px;
     margin-bottom: 30px;
+`
+const CopyButton = Styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #327bff;
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover {
+        -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px; 
+        box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
+    }
 `
 
 export default Create;
