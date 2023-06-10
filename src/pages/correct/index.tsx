@@ -73,7 +73,7 @@ const Correct = () => {
                         <IntroDescription>자소서 AI는 당신의 자소서에 대한 맞춤법 검사, 잘 쓴 점, 그리고 개선할 점을 상세하게 알려줍니다. 이를 통해 자신이 놓치기 쉬운 부분을 확인하고, 자기소개서를 보다 완성도 높게 다듬을 수 있습니다.</IntroDescription>
                         <IntroButton
                             onClick={() => {
-                                router.push('/correct?step=1')
+                                setStep(step + 1)
                             }
                             }
                         >
