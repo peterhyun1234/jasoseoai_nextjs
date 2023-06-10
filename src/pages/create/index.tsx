@@ -162,6 +162,7 @@ const Create = () => {
 
     const getResume = async () => {
         setIsLoading(true)
+        // TODO: API 호출
         // 3초 후에 로딩 끝
         setGeneratedResume(tempGeneratedResume)
         setTimeout(() => {
@@ -192,11 +193,6 @@ const Create = () => {
             }
             <WrapBox>
                 {
-                    step !== undefined && step !== null &&
-                    <>
-                    </>
-                }
-                {
                     step === 0 &&
                     <Box>
                         <IntroImgDiv>
@@ -204,7 +200,7 @@ const Create = () => {
                         </IntroImgDiv>
                         <IntroBox alignDirection='left'>
                             <IntroTitleTag>자소서 생성</IntroTitleTag>
-                            <IntroTitle>AI가 당신의 자소서를 완성해드립니다</IntroTitle>
+                            <IntroTitle>당신의 자소서를 자동으로 만들어 드립니다</IntroTitle>
                             <IntroDescription>회사에 대한 정보와 개인의 특성을 분석하여, AI가 최적화된 자기소개서를 작성합니다. 입력한 정보의 정확성과 자세함이 AI의 성능에 직결되니, 가능한 많이 공유해주시는 것이 좋습니다.</IntroDescription>
                             <IntroButton
                                 onClick={() => {
@@ -592,6 +588,8 @@ const Box = Styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
     gap: 30px;
     @media (max-width: 768px) {
         flex-direction: column;
@@ -629,7 +627,7 @@ const IntroBox = Styled.div<{ alignDirection: string }>`
 const IntroTitleTag = Styled.div`
     color: #14c2ad;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 22px;
     margin-bottom: 20px;
 `
 const IntroTitle = Styled.div`
@@ -637,12 +635,16 @@ const IntroTitle = Styled.div`
     line-height: 40px;
     font-weight: bold;
     margin-bottom: 32px;
+    word-break: keep-all;
+    white-space: break-spaces;
 `
 const IntroDescription = Styled.div`
     font-size: 20px;
     color: #4a4a4a;
     line-height: 28px;
     margin-bottom: 32px;
+    word-break: keep-all;
+    white-space: break-spaces;
 `
 const IntroButton = Styled.div`
     height: 50px;

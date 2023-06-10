@@ -65,8 +65,8 @@ const Inner_TopAppBar_Home = () => {
                             >자소서 문장 추천</MenuBtn>
                             <MenuBtn
                                 isSelected={router.pathname === '/correct'}
-                                // onClick={() => router.push('/correct')}
-                            >자소서 첨삭(준비중)</MenuBtn>
+                                onClick={() => router.push('/correct')}
+                            >자소서 첨삭</MenuBtn>
                         </AppBarLeftDiv>
                         <AppBarCenterDiv>
                         </AppBarCenterDiv>

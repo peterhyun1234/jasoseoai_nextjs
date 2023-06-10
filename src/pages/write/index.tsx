@@ -214,7 +214,7 @@ const Write = () => {
                     <Box>
                         <IntroBox alignDirection='left'>
                             <IntroTitleTag>자소서 문장 추천</IntroTitleTag>
-                            <IntroTitle>AI가 당신의 자소서의 다음 문장을 추천해드립니다</IntroTitle>
+                            <IntroTitle>자소서의 다음 문장을 추천해드립니다</IntroTitle>
                             <IntroDescription>작성 중인 자기소개서와 제공하신 회사 정보, 개인 정보를 기반으로, AI가 다음 문장을 창의적이면서도 효과적으로 추천해드립니다. 당신의 자소서를 한 단계 업그레이드 시켜보세요.</IntroDescription>
                             <IntroButton
                                 onClick={() => {
@@ -506,6 +506,8 @@ const Box = Styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
     gap: 30px;
     @media (max-width: 768px) {
         flex-direction: column;
@@ -543,7 +545,7 @@ const IntroBox = Styled.div<{ alignDirection: string }>`
 const IntroTitleTag = Styled.div`
     color: #14c2ad;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 22px;
     margin-bottom: 20px;
 `
 const IntroTitle = Styled.div`
@@ -551,12 +553,16 @@ const IntroTitle = Styled.div`
     line-height: 40px;
     font-weight: bold;
     margin-bottom: 32px;
+    word-break: keep-all;
+    white-space: break-spaces;
 `
 const IntroDescription = Styled.div`
     font-size: 20px;
     color: #4a4a4a;
     line-height: 28px;
     margin-bottom: 32px;
+    word-break: keep-all;
+    white-space: break-spaces;
 `
 const IntroButton = Styled.div`
     height: 50px;
