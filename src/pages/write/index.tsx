@@ -199,13 +199,6 @@ const Write = () => {
                 <Inner_TopAppBar_Home />
             }
             <WrapBox>
-                {/* 자소서 목록
-                    새 자소서
-                    내보내기
-                    //
-                    맞춤법 검사
-                    AI 자소서 작성 ON/OFF
-                    저장(마지막 저장) */}
                 <WritingResumeFunctionBox>
                     <FunctionButtonDiv onClick={() => {
                     }}>
@@ -263,8 +256,8 @@ const Write = () => {
                                         onChange={handleJobChange}
                                     />
                                 </WritingCompanyDiv>
-                                <WritingCompanyButtonDiv
-                                    isReadyToSummit={company !== '' && job !== '' ? true : false}
+                                <CommonButton
+                                    isReady={company !== '' && job !== '' ? true : false}
                                     onClick={() => {
                                         if (company !== '' && job !== '') {
                                             setIsWritingReady(true)
@@ -273,7 +266,7 @@ const Write = () => {
                                     }
                                 >
                                     자기소개서 작성 시작
-                                </WritingCompanyButtonDiv>
+                                </CommonButton>
                             </WritingCompanyBox>
                             :
                             <>
@@ -469,8 +462,9 @@ const WrapBox = Styled.div`
     width: 100%;
     display: inline-block;
     max-width: 1000px;
-    padding-top: 120px;
+    padding-top: calc(80px + 100px);
     padding-bottom: 100px;
+    min-height: 100vh;
 `
 const WritingResumeFunctionBox = Styled.div`
     display: flex;
@@ -515,7 +509,7 @@ const FunctionText = Styled.div`
 const WritingResumeBox = Styled.div`
     width: 100%;
     background-color: #fff;
-    padding: 10px;
+    padding: 20px;
     border-radius: 10px;
     display: flex;
     justify-content: center;
@@ -543,20 +537,21 @@ const WritingCompanyTextSpan = Styled.span`
     color: #428d93;
     font-weight: bold;
 `
-const WritingCompanyButtonDiv = Styled.div<{ isReadyToSummit: boolean }>`
+const CommonButton = Styled.div<{ isReady: boolean }>`
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 40px;
-    background-color: ${props => props.isReadyToSummit ? '#428d93' : '#ccc'};
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: ${props => props.isReady ? '#428d93' : '#ccc'};
     color: #fff;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
     &:hover {
-        background-color: ${props => props.isReadyToSummit ? '#428d93' : '#ccc'};
+        background-color: ${props => props.isReady ? '#428d93' : '#ccc'};
         -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px; 
         box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
     }
