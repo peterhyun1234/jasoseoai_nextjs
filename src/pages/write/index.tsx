@@ -117,10 +117,10 @@ const Write = () => {
             - 자기소개서 내용: ${answer}
           `;
 
-            const response = await axios.post('https://api.openai.com/v1/completions', {
-                model: 'text-davinci-003',
-                prompt: prompt,
-                max_tokens: 1200,
+            const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+                model: 'gpt-3.5-turbo',
+                messages: [{ role: "system", content: prompt }],
+                max_tokens: 2000,
                 n: 1,
                 stop: null,
                 temperature: 0.7,
@@ -130,7 +130,7 @@ const Write = () => {
                     'Authorization': `Bearer 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`,
                 },
             });
-            let recommendation = response.data.choices[0].text.trim();
+            let recommendation = response.data.choices[0].message.content.trim();
             const removingWords = ['다음 문장 :', '답 :', '답:', '답: ', '답 : ', '답:', '문장 추천:', '문장 추천 :', '문장 추천 : '];
             removingWords.forEach((word) => {
                 recommendation = recommendation.replace(word, '').trim();

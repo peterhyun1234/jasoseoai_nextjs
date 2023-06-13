@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useCopyToClipboard } from 'react-use';
 
+import axios from 'axios';
+
 import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
 import LoadingPopup from '@/components/popup/LoadingPopup';
 
@@ -50,26 +52,17 @@ const placeholder = {
     resumeQuestion: '길동전자를 지원한 이유와 입사 후 회사에서 이루고 싶은 꿈을 기술하십시오. (500자 이내)',
 }
 
-const tempGeneratedResume = `1. 길동전자를 지원한 이유와 입사 후 회사에서 이루고 싶은 꿈을 기술하십시오. (500자 이내)
-길동전자는 품질과 혁신에 대한 끊임없는 추구로 인해 업계에서 높은 존경을 받고 있는 기업입니다. 제 개인적으로는 이런 문화에서 깊은 인상을 받았고, 이는 제가 프론트엔드 개발자로서 능력을 최대한 발휘하고 싶어하는 바람과도 잘 어울립니다. 이전에 진행했던 프로젝트들에서 React, Vue.js, Node.js 등 다양한 기술을 사용하여 실질적인 비즈니스 로직을 구현하는 경험을 했습니다. 이런 경험들을 바탕으로 길동전자에서는 사용자 경험을 향상시키는 인터페이스를 개발하고, 그 이면에 있는 복잡한 기술적 문제를 해결하는 데 기여하고 싶습니다. 또한, 차후에는 제 팀을 이끌며, 길동전자의 혁신적인 기업 문화를 지속적으로 발전시키는 데 기여하고 싶습니다.
-
-2. 본인의 성장과정을 간략히 기술하되 현재의 자신에게 가장 큰 연향을 끼친 사건, 인물 등을 포함하며 기술하시기 바랍니다. (500자 이내)
-제 프론트엔드 개발자로서의 여정은 길동대학교에서 '당신을 위한 계산기'라는 프로젝트를 진행하면서 시작되었습니다. 이 프로젝트에서는 React와 GraphQL을 활용하여 개발하였고, 이를 통해 사용자 중심의 인터페이스 개발에 대한 이해를 높이고, 복잡한 문제를 해결하는 능력을 향상시킬 수 있었습니다. 이러한 경험은 저에게 개발자로서의 핵심 역량을 쌓을 수 있는 기회를 제공했고, 이는 나중에 (주)홍길동스토어와 (주)김철수스토어에서 인턴으로 일하면서도 큰 도움이 되었습니다. 특히, 길동 CMS 프로젝트에서는 Vue.js와 REST API를 활용한 실질적인 비즈니스 로직을 구현하는 데 성공했고, 이를 통해 프론트엔드 개발에 대한 전반적인 이해를 높였습니다. 마지막으로 길동코드 프로젝트에서는 Full-stack 개발에 참여하였고, 이를 통해 전체 웹 애플리케이션의 아키텍처를 이해하고 관리하는 능력을 향상시켰습니다. 이런 경험들은 저를 더 나은 개발자로 성장시키는 데 큰 도움을 주었습니다.
-`
-
 const Create = () => {
     const router = useRouter()
 
     const [step, setStep] = useState<number>(0)
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
-    // step 1
     const [company, setCompany] = useState<string>('')
     const [companyDescription, setCompanyDescription] = useState<string>('')
     const [job, setJob] = useState<string>('')
     const [jobDescription, setJobDescription] = useState<string>('')
 
-    // step 2
     const [name, setName] = useState<string>('')
     const [education, setEducation] = useState<string>('')
     const [certification, setCertification] = useState<string>('')
@@ -78,12 +71,10 @@ const Create = () => {
     const [personality, setPersonality] = useState<string>('')
     const [etc, setEtc] = useState<string>('')
 
-    // step 3
     const [resumeFormType, setResumeFormType] = useState<string>('')
     const [resumeQuestionList, setResumeQuestionList] = useState([''])
     const [resumeMaxCharacterNum, setResumeMaxCharacterNum] = useState<number>(500)
 
-    // result
     const [generatedResume, setGeneratedResume] = useState<string>('')
     const [isCopied, copyToClipboard] = useCopyToClipboard()
 
@@ -132,7 +123,7 @@ const Create = () => {
     }
     const handleResumeMaxCharacterNumChange = (e: any) => {
         const value = e.target.value.replace(/[^0-9]/g, '');
-        if (value > 0) {
+        if (value >= 0) {
             setResumeMaxCharacterNum(value)
         }
     }
@@ -160,14 +151,86 @@ const Create = () => {
         setGeneratedResume(e.target.value)
     }
 
-    const getResume = async () => {
+    const getResume = async (resumeFormType: string) => {
+        let resumeOption = `
+- 자기소개서 결과만 보내줘`
+        if (resumeFormType === 'maxCharacterNum') {
+            resumeOption += `
+- 자기소개서 최대 글자 수: ${resumeMaxCharacterNum}`
+        } else if (resumeFormType === 'add') {
+            resumeOption += `
+- 자기소개서 항목:`
+            resumeQuestionList.forEach((question, index) => {
+                if (question !== '') {
+                    resumeOption += `
+    ${index + 1}. ${question}`
+                }
+            })
+        }
+        resumeOption += `
+- 회사 이름: ${company}`
+        if (companyDescription !== '') {
+            resumeOption += `
+- 회사 설명: ${companyDescription}`
+        }
+        resumeOption += `
+- 직무 이름: ${job}`
+        if (jobDescription !== '') {
+            resumeOption += `
+- 직무 설명: ${jobDescription}`
+        }
+        resumeOption += `
+- 지원자 이름: ${name}
+- 최종 학력: ${education}`
+        if (certification !== '') {
+            resumeOption += `
+- 자격증: ${certification}`
+        }
+        if (experience !== '') {
+            resumeOption += `
+- 경력사항: ${experience}`
+        }
+        if (majorProject !== '') {
+            resumeOption += `
+- 주요 프로젝트: ${majorProject}`
+        }
+        if (personality !== '') {
+            resumeOption += `
+- 성격의 장단점: ${personality}`
+        }
+        if (etc !== '') {
+            resumeOption += `
+- 기타: ${etc}`
+        }
+
         setIsLoading(true)
-        // TODO: API 호출
-        // 3초 후에 로딩 끝
-        setGeneratedResume(tempGeneratedResume)
-        setTimeout(() => {
-            setIsLoading(false)
-        }, 3000)
+        try {
+            const prompt = "아래 내용들을 참고해서 자기소개서를 만들어줘." + resumeOption;
+
+            const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+                model: 'gpt-3.5-turbo',
+                messages: [{ role: "system", content: prompt }],
+                max_tokens: 2000,
+                n: 1,
+                stop: null,
+                temperature: 0.3,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer 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`,
+                },
+            });
+            const recvResume = response.data.choices[0].message.content.trim();
+            if (recvResume !== null && recvResume !== undefined && recvResume.length > 0) {
+                setGeneratedResume(recvResume)
+            } else {
+                alert('자기소개서를 생성하는데 실패했습니다.')
+            }
+        } catch (error) {
+            console.error(error);
+        }
+        setStep(step + 1)
+        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -187,7 +250,7 @@ const Create = () => {
             backgroundRepeat: 'no-repeat',
             backgroundSize: '100%',
         }}>
-            {isLoading && <LoadingPopup loadingText='AI가 자기소개서를 생성중입니다.' />}
+            {isLoading && <LoadingPopup loadingText='AI가 자기소개서를 생성중입니다.(최대 2분)' />}
             {
                 <Inner_TopAppBar_Home />
             }
@@ -527,8 +590,7 @@ const Create = () => {
                             isReady={resumeFormType !== '' ? true : false}
                             onClick={() => {
                                 if (resumeFormType !== '') {
-                                    setStep(step + 1)
-                                    getResume()
+                                    getResume(resumeFormType)
                                 }
                             }
                             }

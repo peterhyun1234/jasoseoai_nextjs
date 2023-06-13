@@ -9,7 +9,6 @@ import temp_intro from '@/assets/images/temp_introduction.gif'
 import temp1x1 from '@/assets/images/temp1x1.gif'
 import temp3x4 from '@/assets/images/temp3x4.gif'
 
-import FolderCopyRoundedIcon from '@mui/icons-material/FolderCopyRounded';
 import FastForwardRoundedIcon from '@mui/icons-material/FastForwardRounded';
 import GppGoodRoundedIcon from '@mui/icons-material/GppGoodRounded';
 import AutoFixHighRoundedIcon from '@mui/icons-material/AutoFixHighRounded';
@@ -34,11 +33,15 @@ const Home = () => {
                 <MainBannerDiv>
                     <MainBannerIntroDiv>
                         <MainBannerTitleTag>{"ChatGPT 기반 자소서 작성 서비스"}</MainBannerTitleTag>
-                        <MainBannerTitle>{"자소서 AI를 통해서 전문적인 이력서를 빠르게 작성해보세요."}</MainBannerTitle>
+                        <MainBannerTitle>{"자소서 AI를 통해서 전문적인 자소서를 빠르게 작성해보세요."}</MainBannerTitle>
                         <MainBannerSubTitle>{"모든 사람들에게 도움을 주기 위한 취지로 만들어진 자소서 AI의 모든 기능은 무료로 사용가능합니다. 다만 무분별한 사용을 방지하기 위해서 계정별로 하루 이용량이 제한됩니다."}</MainBannerSubTitle>
                         <MainBannerFunctionDiv>
-                            <CreationFunctionButton>{"자기소개서 생성"}</CreationFunctionButton>
-                            <CorrectionFunctionButton>{"자기소개서 첨삭"}</CorrectionFunctionButton>
+                            <CreationFunctionButton onClick={()=>{
+                                router.push('/create')
+                            }}>{"자기소개서 생성"}</CreationFunctionButton>
+                            <CorrectionFunctionButton onClick={()=>{
+                                router.push('/correct')
+                            }}>{"자기소개서 첨삭"}</CorrectionFunctionButton>
                         </MainBannerFunctionDiv>
                     </MainBannerIntroDiv>
                     <MainBannerImgDiv>
@@ -474,11 +477,6 @@ const FooterInfoDescription = Styled.div`
     font-size: 20px;
     margin-bottom: 10px;
     cursor: pointer;
-    user-select: auto;
-    -webkit-user-select: auto;
-    -moz-user-select: auto;
-    -khtml-user-select: auto;
-    -ms-user-select: auto;
 `
 
 export default Home;
