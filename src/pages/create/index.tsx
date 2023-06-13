@@ -591,6 +591,7 @@ const Box = Styled.div`
     background: rgba(255, 255, 255, 0.6);
     border-radius: 10px;
     gap: 30px;
+    padding: 20px;
     @media (max-width: 768px) {
         flex-direction: column;
     }
@@ -601,6 +602,7 @@ const IntroImgDiv = Styled.div`
     display: flex;
     @media (max-width: 768px) {
         width: 100%;
+        order: 1;
     }
 `
 const IntroImg = Styled(Image)`
@@ -622,6 +624,7 @@ const IntroBox = Styled.div<{ alignDirection: string }>`
     @media (max-width: 768px) {
         justify-content: center;
         align-items: center;
+        order: 2;
     }
 `
 const IntroTitleTag = Styled.div`
