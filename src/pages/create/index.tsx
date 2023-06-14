@@ -159,7 +159,7 @@ const Create = () => {
 - 자기소개서 최대 글자 수: ${resumeMaxCharacterNum}`
         } else if (resumeFormType === 'add') {
             resumeOption += `
-- 자기소개서 항목:`
+- 아래 자기소개서 항목들에 대한 답으로 자기소개서를 구성해줘:`
             resumeQuestionList.forEach((question, index) => {
                 if (question !== '') {
                     resumeOption += `
