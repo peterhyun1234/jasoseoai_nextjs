@@ -8,7 +8,6 @@ env:
   AWS_REGION: ap-northeast-2
   ECR_REGISTRY: 076831690411.dkr.ecr.ap-northeast-2.amazonaws.com
   ECR_REPOSITORY: jasoseoai_nextjs
-  IMAGE_TAG: latest
 
 jobs:
   build-and-push:
@@ -37,4 +36,3 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" > $GITHUB_ENV
