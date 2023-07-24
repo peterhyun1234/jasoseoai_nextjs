@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 4000",
+    "dev": "env-cmd -f .env.development next dev",
+    "dev:prod": "env-cmd -f .env.production next dev",
+    "build:dev": "env-cmd -f .env.development next build",
     "build": "env-cmd -f .env.production next build",
-    "start": "next start -p 4000",
+    "start": "env-cmd -f .env.production next start",
     "docker:build": "docker build --pull --rm -f \"Dockerfile\" -t jasoseoainextjs:latest \".\" ",
     "docker:run": "docker run -d -p 4000:4000 jasoseoainextjs",
-    "ecr:signin": "aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 076831690411.dkr.ecr.ap-northeast-2.amazonaws.com",
-    "ecr:push": "docker tag jasoseoainextjs:latest 076831690411.dkr.ecr.ap-northeast-2.amazonaws.com/jasoseoai_nextjs:latest && docker push 076831690411.dkr.ecr.ap-northeast-2.amazonaws.com/jasoseoai_nextjs:latest",
     "pm2": "pm2 list && pm2-runtime start pm2.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -34,6 +34,7 @@
     "eslint-config-next": "13.1.6",
     "fs": "^0.0.1-security",
     "husky": "^8.0.3",
+    "jsonwebtoken": "^9.0.1",
     "next": "13.1.6",
     "next-auth": "^4.19.2",
     "next-compose-plugins": "^2.2.1",
@@ -48,6 +49,7 @@
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.2",
     "@types/smoothscroll-polyfill": "^0.3.1",
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
