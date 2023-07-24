@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextAuth from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
-import NaverProvider from 'next-auth/providers/naver';
 import GitHubProvider from 'next-auth/providers/github';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
@@ -18,17 +16,9 @@ const generateToken = (user: string | object | Buffer) => {
 
 const nextAuthOptions: any = {
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
     KakaoProvider({
       clientId: process.env.KAKAO_CLIENT_ID!,
       clientSecret: process.env.KAKAO_CLIENT_SECRET!,
-    }),
-    NaverProvider({
-      clientId: process.env.NAVER_CLIENT_ID!,
-      clientSecret: process.env.NAVER_CLIENT_SECRET!,
     }),
     GitHubProvider({
       clientId: process.env.SSO_GITHUB_CLIENT_ID!,
@@ -41,6 +31,7 @@ const nextAuthOptions: any = {
       if (trigger === 'signIn') {
         try {
           if (account) {
+            // TODO: 회원에 대한 api 처리 필요
             const userForToken = {
               username: token.name,
               provider: account.provider ?? 'unknown',
@@ -62,17 +53,6 @@ const nextAuthOptions: any = {
                 currentUser = res.data;
               }
             } else {
-              if (currentUser.roomId) {
-                res = await axios.get(`/rooms/id/${currentUser.roomId}`);
-                const currentRoom = res.data;
-                currentUser = {
-                  ...currentUser,
-                  roomName: currentRoom.roomName,
-                  roomInviteCode: currentRoom.inviteCode,
-                };
-              }
-            }
-            if (currentUser) {
               token.user = currentUser;
             }
             token.accessToken = generatedToken;
