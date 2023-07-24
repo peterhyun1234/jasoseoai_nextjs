@@ -28,16 +28,18 @@ const nextAuthOptions: any = {
   secret: process.env.NEXTAUTH_SECRET!,
   callbacks: {
     async jwt({ token, trigger, session, account }: any) {
+      console.log('$$ trigger: ', trigger);
       if (trigger === 'signIn') {
         try {
+          console.log('$$ account: ', account);
           if (account) {
-            // TODO: 회원에 대한 api 처리 필요
             const userForToken = {
               username: token.name,
               provider: account.provider ?? 'unknown',
               email: token.email,
             };
             const generatedToken = generateToken(userForToken);
+            console.log('$$ generatedToken: ', generatedToken);
             axios.defaults.headers.common[
               'Authorization'
             ] = `Bearer ${generatedToken}`;
@@ -47,6 +49,7 @@ const nextAuthOptions: any = {
             );
 
             let currentUser = res.data
+            console.log('$$ currentUser: ', currentUser);
             if (!currentUser) {
               res = await axios.post(`/users`, userForToken);
               if (res.data.username) {

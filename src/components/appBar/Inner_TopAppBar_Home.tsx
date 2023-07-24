@@ -1,99 +1,123 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import Styled from 'styled-components'
-import Image from 'next/image'
-import { useRouter } from 'next/router'
+import Styled from 'styled-components';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import LOGO from '@/assets/images/jasoseoai_logo.png';
+import LOGO_TEXT from '@/assets/images/jasoseoai_logo_text.png';
 
-const Inner_TopAppBar_Home = () => {
-    const router = useRouter();
+type Props = {
+  isSignIn?: boolean;
+};
+const Inner_TopAppBar_Home = ({ isSignIn }: Props) => {
+  const router = useRouter();
 
-    const [pageYOffset, setPageYOffset] = useState<any>(0);
-    const [innerWidth, setInnerWidth] = useState<any>(1000);
+  const [pageYOffset, setPageYOffset] = useState<any>(0);
+  const [innerWidth, setInnerWidth] = useState<any>(1000);
 
-    const onClickLogo = () => {
-        router.push('/')
-    }
+  const onClickLogo = () => {
+    router.push('/');
+  };
 
-    const handleScroll = () => {
-        const curScrollTop = window.pageYOffset
-        setPageYOffset(curScrollTop)
-    }
+  const handleScroll = () => {
+    const curScrollTop = window.pageYOffset;
+    setPageYOffset(curScrollTop);
+  };
 
-    const handleResize = () => {
-        const curInnerWidth = window.innerWidth
-        setInnerWidth(curInnerWidth)
-    }
+  const handleResize = () => {
+    const curInnerWidth = window.innerWidth;
+    setInnerWidth(curInnerWidth);
+  };
 
-    useEffect(() => {
-        //TODO: 스크롤 이벤트, 리사이즈 이벤트 media query로 대체
-        setInnerWidth(window.innerWidth)
-        setPageYOffset(window.pageYOffset)
-        window.addEventListener('scroll', handleScroll)
-        window.addEventListener('resize', handleResize)
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
-            window.removeEventListener('resize', handleResize)
-        }
-    }, [])
+  useEffect(() => {
+    //TODO: 스크롤 이벤트, 리사이즈 이벤트 media query로 대체
+    setInnerWidth(window.innerWidth);
+    setPageYOffset(window.pageYOffset);
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
-    return (
-        <WrapBox scrollTop={pageYOffset}>
-            {
-                innerWidth <= 650 ?
-                    <AppBarDetailDiv>
-                        <AppBarLeftDiv>
-                            <LogoBtn alt="Logo" src={LOGO} onClick={() => onClickLogo()} />
-                        </AppBarLeftDiv>
-                        <AppBarCenterDiv>
-                        </AppBarCenterDiv>
-                        <AppBarRightDiv>
-                        </AppBarRightDiv>
-                    </AppBarDetailDiv>
-                    :
-                    <AppBarDetailDiv>
-                        <AppBarLeftDiv>
-                            <LogoBtn alt="Logo" src={LOGO} onClick={() => onClickLogo()} />
-                            <AppBarDivider />
-                            <MenuBtn 
-                                isSelected={router.pathname === '/create'}
-                                onClick={() => router.push('/create')}
-                            >자소서 생성</MenuBtn>
-                            <MenuBtn
-                                isSelected={router.pathname === '/write'}
-                                onClick={() => router.push('/write')}
-                            >자소서 문장 추천</MenuBtn>
-                            <MenuBtn
-                                isSelected={router.pathname === '/correct'}
-                                onClick={() => router.push('/correct')}
-                            >자소서 첨삭</MenuBtn>
-                        </AppBarLeftDiv>
-                        <AppBarCenterDiv>
-                        </AppBarCenterDiv>
-                        <AppBarRightDiv>
-                            <SignBtn onClick={() => router.push('/signIn')}>
-                                <p>로그인</p>
-                            </SignBtn>
-                            <ContactBtn onClick={() => {
-                                window.open('https://peterjeon.co.kr', '_blank')
-                            }}>
-                                <p>Contact</p>
-                            </ContactBtn>
-                        </AppBarRightDiv>
-                    </AppBarDetailDiv>
-            }
-        </WrapBox>
-    )
+  return (
+    <WrapBox scrollTop={pageYOffset}>
+      {innerWidth <= 650 ? (
+        <AppBarDetailDiv>
+          <AppBarLeftDiv>
+            <LogoBtn alt="Logo" src={LOGO_TEXT} onClick={() => onClickLogo()} />
+          </AppBarLeftDiv>
+          <AppBarCenterDiv></AppBarCenterDiv>
+          <AppBarRightDiv></AppBarRightDiv>
+        </AppBarDetailDiv>
+      ) : (
+        <AppBarDetailDiv>
+          <AppBarLeftDiv>
+            <LogoBtn alt="Logo" src={LOGO_TEXT} onClick={() => onClickLogo()} />
+            <AppBarDivider />
+            <MenuBtn
+              isSelected={router.pathname === '/create'}
+              onClick={() => router.push('/create')}
+            >
+              자소서 생성
+            </MenuBtn>
+            <MenuBtn
+              isSelected={router.pathname === '/write'}
+              onClick={() => router.push('/write')}
+            >
+              자소서 문장 추천
+            </MenuBtn>
+            <MenuBtn
+              isSelected={router.pathname === '/correct'}
+              onClick={() => router.push('/correct')}
+            >
+              자소서 첨삭
+            </MenuBtn>
+          </AppBarLeftDiv>
+          <AppBarCenterDiv></AppBarCenterDiv>
+          <AppBarRightDiv>
+            {isSignIn ? (
+              <ProfileManagementBtn onClick={() => router.push('/profile')}>
+                <p>계정 관리</p>
+              </ProfileManagementBtn>
+            ) : (
+              <SignBtn onClick={() => router.push('/auth/signin')}>
+                <p>로그인</p>
+              </SignBtn>
+            )}
+            <ContactBtn
+              onClick={() => {
+                window.open('https://peterjeon.co.kr', '_blank');
+              }}
+            >
+              <p>Contact</p>
+            </ContactBtn>
+          </AppBarRightDiv>
+        </AppBarDetailDiv>
+      )}
+    </WrapBox>
+  );
 };
 
 const LogoBtn = Styled(Image)`
     margin-bottom: 10px;
     width: 120px;
     height: 40px;
-`
+`;
 const WrapBox = Styled.div<{ scrollTop: number }>`
-    background-color: rgba(255, 255, 255, ${props => props.scrollTop >= 80 && props.scrollTop <= 160 ? (props.scrollTop - 80) / 80 : props.scrollTop > 160 ? 1 : 0});
-    border-bottom: 1px solid rgba(0, 0, 0, ${props => props.scrollTop >= 80 && props.scrollTop <= 160 ? (props.scrollTop - 80) / 800 : props.scrollTop > 160 ? 0.1 : 0});
+    background-color: rgba(255, 255, 255, ${(props) =>
+      props.scrollTop >= 80 && props.scrollTop <= 160
+        ? (props.scrollTop - 80) / 80
+        : props.scrollTop > 160
+        ? 1
+        : 0});
+    border-bottom: 1px solid rgba(0, 0, 0, ${(props) =>
+      props.scrollTop >= 80 && props.scrollTop <= 160
+        ? (props.scrollTop - 80) / 800
+        : props.scrollTop > 160
+        ? 0.1
+        : 0});
     height: 80px;
     width: 100%;
     position: fixed;
@@ -101,7 +125,7 @@ const WrapBox = Styled.div<{ scrollTop: number }>`
     justify-content: center;
     align-items: center;
     z-index: 5;
-`
+`;
 const AppBarDetailDiv = Styled.div`
     display: flex;
     justify-content: space-between;
@@ -110,29 +134,31 @@ const AppBarDetailDiv = Styled.div`
     max-width: 1000px;
     padding-right: 16px;
     padding-left: 16px;
-`
+`;
 const AppBarLeftDiv = Styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
     gap: 25px;
-`
+`;
 const AppBarCenterDiv = Styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-`
+`;
 const AppBarDivider = Styled.div`
     width: 20px;
-`
+`;
 const AppBarRightDiv = Styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 25px;
-`
+`;
 const MenuBtn = Styled.div<{ isSelected: boolean }>`
-    ${props => props.isSelected === true && `background: linear-gradient(65deg, rgba(153,196,0,1) 0%, rgba(1,99,49,1) 33%, rgba(25,153,149,1) 70%, rgba(2,129,154,1) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;`}
+    ${(props) =>
+      props.isSelected === true &&
+      `background: linear-gradient(65deg, rgba(153,196,0,1) 0%, rgba(1,99,49,1) 33%, rgba(25,153,149,1) 70%, rgba(2,129,154,1) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;`}
     font-size: 16px;
     font-weight: 500;
     color: #333;
@@ -145,7 +171,24 @@ const MenuBtn = Styled.div<{ isSelected: boolean }>`
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
-`
+`;
+const ProfileManagementBtn = Styled.div`
+    padding: 7px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    background-color: #428d93;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color .3s ease, color .3s ease;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 15px 3px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 15px 3px;
+
+    &:hover {
+        -webkit-box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 15px 3px;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 15px 3px;
+    }
+`;
 const SignBtn = Styled.div`
     padding: 7px 20px;
     font-size: 15px;
@@ -160,7 +203,7 @@ const SignBtn = Styled.div`
         background-color: #428d93;
         color: #fff;
     }
-`
+`;
 const ContactBtn = Styled.div`
     padding: 7px 20px;
     font-size: 15px;
@@ -177,6 +220,6 @@ const ContactBtn = Styled.div`
         -webkit-box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 15px 3px; 
         box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 15px 3px;
     }
-`
+`;
 
 export default Inner_TopAppBar_Home;

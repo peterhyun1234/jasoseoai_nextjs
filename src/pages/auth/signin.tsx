@@ -6,7 +6,8 @@ import Image from 'next/image';
 
 import LoadingPopup from '@/components/popup/LoadingPopup';
 
-import LOGO from '@/assets/images/logo.png';
+import LOGO from '@/assets/images/jasoseoai_logo.png';
+import LOGO_TEXT from '@/assets/images/jasoseoai_logo_text.png';
 import KAKAO_LOGO from '@/assets/images/kakao_logo.png';
 import GITHUB_LOGO from '@/assets/images/github_logo.png';
 
@@ -18,12 +19,16 @@ const SignIn = () => {
 
   useEffect(() => {
     if (session) {
-      router.push('/');
+      const isUser = !!session?.user;
+      if (isUser) {
+        router.push('/');
+      }
     }
   }, [session]);
 
   const handleSignIn = async (provider: string) => {
     setIsLoading(true);
+    //TODO: trigger is always undefined
     await signIn(provider);
     setIsLoading(false);
   };
@@ -35,7 +40,7 @@ const SignIn = () => {
         <SignInBox>
           <IntroBox>
             <LogoBox>
-              <LogoBtn src={LOGO} alt="Logo" />
+              <LogoBtn src={LOGO_TEXT} alt="Logo" />
             </LogoBox>
             <ServiceDescription>
               GPT 기반 자기소개서 작성 서비스
@@ -134,8 +139,8 @@ const LogoBox = Styled.div`
   align-items: center;
 `;
 const LogoBtn = Styled(Image)`
-  width: 160px;
-  height: 64px;
+  width: 180px;
+  height: 60px;
 	margin-bottom: 10px;
 `;
 const ServiceDescription = Styled.div`
