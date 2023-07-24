@@ -6,10 +6,8 @@ import Image from 'next/image';
 
 import LoadingPopup from '@/components/popup/LoadingPopup';
 
-import LOGO from '@/assets/images/neodohae_logo_text.png';
+import LOGO from '@/assets/images/logo.png';
 import KAKAO_LOGO from '@/assets/images/kakao_logo.png';
-import NAVER_LOGO from '@/assets/images/naver_logo.png';
-import GOOGLE_LOGO from '@/assets/images/google_logo.png';
 import GITHUB_LOGO from '@/assets/images/github_logo.png';
 
 const SignIn = () => {
@@ -40,7 +38,7 @@ const SignIn = () => {
               <LogoBtn src={LOGO} alt="Logo" />
             </LogoBox>
             <ServiceDescription>
-              편안한 공동 생활을 도와주는 서비스
+              GPT 기반 자기소개서 작성 서비스
             </ServiceDescription>
           </IntroBox>
           <SignButtonBox>
@@ -53,20 +51,20 @@ const SignIn = () => {
                 <ProviderLogoImage src={KAKAO_LOGO} alt={'KAKAO_LOGO'} />
                 <ProviderText color={'#3c1e1e'}>카카오로 로그인</ProviderText>
               </ProviderDiv>
-              <ProviderDiv
+              {/* <ProviderDiv
                 onClick={() => handleSignIn('naver')}
                 bgColor={'#04c75a'}
               >
                 <ProviderLogoImage src={NAVER_LOGO} alt={'NAVER_LOGO'} />
                 <ProviderText color={'#ffffff'}>네이버로 로그인</ProviderText>
-              </ProviderDiv>
-              <ProviderDiv
+              </ProviderDiv> */}
+              {/* <ProviderDiv
                 onClick={() => handleSignIn('google')}
                 bgColor={'#ffffff'}
               >
                 <ProviderLogoImage src={GOOGLE_LOGO} alt={'GOOGLE_LOGO'} />
                 <ProviderText color={'#7d8487'}>구글로 로그인</ProviderText>
-              </ProviderDiv>
+              </ProviderDiv> */}
               <ProviderDiv
                 onClick={() => handleSignIn('github')}
                 bgColor={'#ffffff'}
@@ -93,9 +91,9 @@ const WrapBox = Styled.div`
   left: 0;
   background: linear-gradient(
     to bottom right, 
-    rgba(115, 186, 210, 0.8),
-    rgba(231, 239, 243, 0.8),
-    rgba(228, 121, 228, 0.8)
+    rgba(115, 210, 118, 0.8),
+    rgba(243, 241, 231, 0.8),
+    rgba(121, 158, 228, 0.8)
   );
   &::before {
     content: "";

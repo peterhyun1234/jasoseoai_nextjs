@@ -7,11 +7,16 @@ const withPWA = require('next-pwa')({
 const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
+    publicRuntimeConfig: {
+      API_SERVER_URI: process.env.API_SERVER_URI,
+    },
     experimental: {
-        scrollRestoration: true,
+      scrollRestoration: true,
     },
     images: {
-        domains: ['healthfriend.s3.ap-northeast-2.amazonaws.com'],
+      domains: [
+        'neodohaebucket.s3.ap-northeast-2.amazonaws.com',
+      ],
     },
 }
 

@@ -1,18 +1,18 @@
 {
-    "apps": [
-        {
-            "name": "app-name",
-            "script": "node_modules/next/dist/bin/next",
-            "args": "start -p 4000",
-            "cwd": "./",
-            "instances": "max",
-            "exec_mode": "cluster",
-            "autorestart": true,
-            "watch": false,
-            "time": true,
-            "env": {
-                "NEXT_PUBLIC_DEPLOY_MODE": "production"
-            }
-        }
-    ]
+  "apps": [
+    {
+      "name": "jasoseoai_nextjs",
+      "script": "node_modules/next/dist/bin/next",
+      "args": "start -p 4000",
+      "cwd": "./",
+      "instances": "max",
+      "exec_mode": "cluster",
+      "autorestart": true,
+      "watch": false,
+      "time": true,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
 }
