@@ -28,7 +28,6 @@ const SignIn = () => {
 
   const handleSignIn = async (provider: string) => {
     setIsLoading(true);
-    //TODO: trigger is always undefined
     await signIn(provider);
     setIsLoading(false);
   };
