@@ -3,6 +3,9 @@ import Styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
+import Drawer from '@mui/material/Drawer';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+
 import LOGO from '@/assets/images/jasoseoai_logo.png';
 import LOGO_TEXT from '@/assets/images/jasoseoai_logo_text.png';
 
@@ -14,6 +17,86 @@ const Inner_TopAppBar_Home = ({ isSignIn }: Props) => {
 
   const [pageYOffset, setPageYOffset] = useState<any>(0);
   const [innerWidth, setInnerWidth] = useState<any>(1000);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
+  const toggleDrawer = (open: boolean) => (
+    event: React.KeyboardEvent | React.MouseEvent,
+  ) => {
+    if (
+      event &&
+      event.type === 'keydown' &&
+      ((event as React.KeyboardEvent).key === 'Tab' ||
+        (event as React.KeyboardEvent).key === 'Shift')
+    ) {
+      return;
+    }
+    setIsMenuOpen(open);
+  };
+
+  const menuList = () => (
+    <MenuList>
+      <MenuListProfileImg alt="Logo" src={LOGO_TEXT} onClick={() => onClickLogo()} />
+      <MenuDivider />
+      <MenuListItem
+        onClick={() => {
+          router.push('/create');
+          setIsMenuOpen(false);
+        }
+        }
+      >
+        자소서 생성
+      </MenuListItem>
+      <MenuListItem
+        onClick={() => {
+          router.push('/write');
+          setIsMenuOpen(false);
+        }
+        }
+      >
+        자소서 문장 추천
+      </MenuListItem>
+      <MenuListItem
+        onClick={() => {
+          router.push('/correct');
+          setIsMenuOpen(false);
+        }
+        }
+      >
+        자소서 첨삭
+      </MenuListItem>
+      <MenuDivider />
+      {isSignIn ? (
+        <MenuListItem
+          onClick={() => {
+            router.push('/myPage');
+            setIsMenuOpen(false);
+          }
+          }
+        >
+          계정 관리
+        </MenuListItem>
+      ) : (
+        <MenuListItem
+          onClick={() => {
+            router.push('/auth/signin');
+            setIsMenuOpen(false);
+          }
+          }
+        >
+          로그인
+        </MenuListItem>
+      )}
+      <MenuListItem
+        onClick={() => {
+          window.open('https://peterjeon.co.kr', '_blank');
+          setIsMenuOpen(false);
+        }
+        }
+      >
+        Contact
+      </MenuListItem>
+    </MenuList>
+  );
 
   const onClickLogo = () => {
     router.push('/');
@@ -42,14 +125,19 @@ const Inner_TopAppBar_Home = ({ isSignIn }: Props) => {
   }, []);
 
   return (
+    <>
     <WrapBox scrollTop={pageYOffset}>
-      {innerWidth <= 650 ? (
+      {innerWidth <= 800 ? (
         <AppBarDetailDiv>
           <AppBarLeftDiv>
             <LogoBtn alt="Logo" src={LOGO_TEXT} onClick={() => onClickLogo()} />
           </AppBarLeftDiv>
           <AppBarCenterDiv></AppBarCenterDiv>
-          <AppBarRightDiv></AppBarRightDiv>
+          <AppBarRightDiv>
+            <MenuIconDiv onClick={toggleDrawer(true)}>
+              <MenuRoundedIcon fontSize='inherit' color='inherit' />
+            </MenuIconDiv>
+          </AppBarRightDiv>
         </AppBarDetailDiv>
       ) : (
         <AppBarDetailDiv>
@@ -78,7 +166,7 @@ const Inner_TopAppBar_Home = ({ isSignIn }: Props) => {
           <AppBarCenterDiv></AppBarCenterDiv>
           <AppBarRightDiv>
             {isSignIn ? (
-              <ProfileManagementBtn onClick={() => router.push('/profile')}>
+              <ProfileManagementBtn onClick={() => router.push('/myPage')}>
                 <p>계정 관리</p>
               </ProfileManagementBtn>
             ) : (
@@ -97,6 +185,16 @@ const Inner_TopAppBar_Home = ({ isSignIn }: Props) => {
         </AppBarDetailDiv>
       )}
     </WrapBox>
+    {
+      <Drawer
+        anchor={'right'}
+        open={isMenuOpen}
+        onClose={toggleDrawer(false)}
+      >
+        {menuList()}
+      </Drawer>
+    }
+    </>
   );
 };
 
@@ -220,6 +318,48 @@ const ContactBtn = Styled.div`
         -webkit-box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 15px 3px; 
         box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 15px 3px;
     }
+`;
+const MenuIconDiv = Styled.div`
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+const MenuList = Styled.div`
+  width: 300px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  background-color: #fff;
+`;
+const MenuListProfileImg = Styled(Image)`
+  width: 180px;
+  height: 60px;
+  margin-bottom: 40px;
+`;
+const MenuDivider = Styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #d2d2d2;
+`;
+const MenuListItem = Styled.div`
+  width: 100%;
+  text-align: left;
+  padding: 20px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #575757;
+  cursor: pointer;
+  &:hover {
+    font-size: 17px;
+    font-weight: 600;
+    background: linear-gradient(65deg, rgba(153,196,0,1) 0%, rgba(1,99,49,1) 33%, rgba(25,153,149,1) 70%, rgba(2,129,154,1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 `;
 
 export default Inner_TopAppBar_Home;
