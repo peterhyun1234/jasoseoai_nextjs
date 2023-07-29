@@ -28,10 +28,8 @@ const nextAuthOptions: any = {
   secret: process.env.NEXTAUTH_SECRET!,
   callbacks: {
     async jwt({ token, trigger, session, account }: any) {
-      console.log('$$ trigger: ', trigger);
       if (trigger === 'signIn') {
         try {
-          console.log('$$ account: ', account);
           if (account) {
             const userForToken = {
               username: token.name,
@@ -39,7 +37,6 @@ const nextAuthOptions: any = {
               email: token.email,
             };
             const generatedToken = generateToken(userForToken);
-            console.log('$$ generatedToken: ', generatedToken);
             axios.defaults.headers.common[
               'Authorization'
             ] = `Bearer ${generatedToken}`;
@@ -48,14 +45,14 @@ const nextAuthOptions: any = {
               `/users/email/${userForToken.email}/provider/${userForToken.provider}`,
             );
 
-            let currentUser = res.data
-            console.log('$$ currentUser: ', currentUser);
+            let currentUser = res.data;
             if (!currentUser) {
               res = await axios.post(`/users`, userForToken);
               if (res.data.username) {
                 currentUser = res.data;
               }
-            } else {
+            }
+            if (currentUser) {
               token.user = currentUser;
             }
             token.accessToken = generatedToken;
