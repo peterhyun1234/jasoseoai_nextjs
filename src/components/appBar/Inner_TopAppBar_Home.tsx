@@ -19,48 +19,69 @@ const Inner_TopAppBar_Home = ({ isSignIn }: Props) => {
   const [innerWidth, setInnerWidth] = useState<any>(1000);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
-  const toggleDrawer = (open: boolean) => (
-    event: React.KeyboardEvent | React.MouseEvent,
-  ) => {
-    if (
-      event &&
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' ||
-        (event as React.KeyboardEvent).key === 'Shift')
-    ) {
-      return;
-    }
-    setIsMenuOpen(open);
-  };
+  const toggleDrawer =
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event &&
+        event.type === 'keydown' &&
+        ((event as React.KeyboardEvent).key === 'Tab' ||
+          (event as React.KeyboardEvent).key === 'Shift')
+      ) {
+        return;
+      }
+      setIsMenuOpen(open);
+    };
 
   const menuList = () => (
     <MenuList>
-      <MenuListProfileImg alt="Logo" src={LOGO_TEXT} onClick={() => onClickLogo()} />
+      <MenuListProfileImg
+        alt="Logo"
+        src={LOGO_TEXT}
+        onClick={() => onClickLogo()}
+      />
       <MenuDivider />
       <MenuListItem
         onClick={() => {
+          if (!isSignIn) {
+            if (confirm('로그인이 필요한 서비스입니다. 로그인 하시겠습니까?')) {
+              router.push('/auth/signin');
+              setIsMenuOpen(false);
+            }
+            return;
+          }
           router.push('/create');
           setIsMenuOpen(false);
-        }
-        }
+        }}
       >
         자소서 생성
       </MenuListItem>
       <MenuListItem
         onClick={() => {
+          if (!isSignIn) {
+            if (confirm('로그인이 필요한 서비스입니다. 로그인 하시겠습니까?')) {
+              router.push('/auth/signin');
+              setIsMenuOpen(false);
+            }
+            return;
+          }
           router.push('/write');
           setIsMenuOpen(false);
-        }
-        }
+        }}
       >
         자소서 문장 추천
       </MenuListItem>
       <MenuListItem
         onClick={() => {
+          if (!isSignIn) {
+            if (confirm('로그인이 필요한 서비스입니다. 로그인 하시겠습니까?')) {
+              router.push('/auth/signin');
+              setIsMenuOpen(false);
+            }
+            return;
+          }
           router.push('/correct');
           setIsMenuOpen(false);
-        }
-        }
+        }}
       >
         자소서 첨삭
       </MenuListItem>
@@ -70,8 +91,7 @@ const Inner_TopAppBar_Home = ({ isSignIn }: Props) => {
           onClick={() => {
             router.push('/myPage');
             setIsMenuOpen(false);
-          }
-          }
+          }}
         >
           계정 관리
         </MenuListItem>
@@ -80,8 +100,7 @@ const Inner_TopAppBar_Home = ({ isSignIn }: Props) => {
           onClick={() => {
             router.push('/auth/signin');
             setIsMenuOpen(false);
-          }
-          }
+          }}
         >
           로그인
         </MenuListItem>
@@ -90,8 +109,7 @@ const Inner_TopAppBar_Home = ({ isSignIn }: Props) => {
         onClick={() => {
           window.open('https://peterjeon.co.kr', '_blank');
           setIsMenuOpen(false);
-        }
-        }
+        }}
       >
         Contact
       </MenuListItem>
@@ -126,74 +144,118 @@ const Inner_TopAppBar_Home = ({ isSignIn }: Props) => {
 
   return (
     <>
-    <WrapBox scrollTop={pageYOffset}>
-      {innerWidth <= 800 ? (
-        <AppBarDetailDiv>
-          <AppBarLeftDiv>
-            <LogoBtn alt="Logo" src={LOGO_TEXT} onClick={() => onClickLogo()} />
-          </AppBarLeftDiv>
-          <AppBarCenterDiv></AppBarCenterDiv>
-          <AppBarRightDiv>
-            <MenuIconDiv onClick={toggleDrawer(true)}>
-              <MenuRoundedIcon fontSize='inherit' color='inherit' />
-            </MenuIconDiv>
-          </AppBarRightDiv>
-        </AppBarDetailDiv>
-      ) : (
-        <AppBarDetailDiv>
-          <AppBarLeftDiv>
-            <LogoBtn alt="Logo" src={LOGO_TEXT} onClick={() => onClickLogo()} />
-            <AppBarDivider />
-            <MenuBtn
-              isSelected={router.pathname === '/create'}
-              onClick={() => router.push('/create')}
-            >
-              자소서 생성
-            </MenuBtn>
-            <MenuBtn
-              isSelected={router.pathname === '/write'}
-              onClick={() => router.push('/write')}
-            >
-              자소서 문장 추천
-            </MenuBtn>
-            <MenuBtn
-              isSelected={router.pathname === '/correct'}
-              onClick={() => router.push('/correct')}
-            >
-              자소서 첨삭
-            </MenuBtn>
-          </AppBarLeftDiv>
-          <AppBarCenterDiv></AppBarCenterDiv>
-          <AppBarRightDiv>
-            {isSignIn ? (
-              <ProfileManagementBtn onClick={() => router.push('/myPage')}>
-                <p>계정 관리</p>
-              </ProfileManagementBtn>
-            ) : (
-              <SignBtn onClick={() => router.push('/auth/signin')}>
-                <p>로그인</p>
-              </SignBtn>
-            )}
-            <ContactBtn
-              onClick={() => {
-                window.open('https://peterjeon.co.kr', '_blank');
-              }}
-            >
-              <p>Contact</p>
-            </ContactBtn>
-          </AppBarRightDiv>
-        </AppBarDetailDiv>
-      )}
-    </WrapBox>
-    {
-      <Drawer
-        anchor={'right'}
-        open={isMenuOpen}
-        onClose={toggleDrawer(false)}
-      >
-        {menuList()}
-      </Drawer>
-    }
+      <WrapBox scrollTop={pageYOffset}>
+        {innerWidth <= 800 ? (
+          <AppBarDetailDiv>
+            <AppBarLeftDiv>
+              <LogoBtn
+                alt="Logo"
+                src={LOGO_TEXT}
+                onClick={() => onClickLogo()}
+              />
+            </AppBarLeftDiv>
+            <AppBarCenterDiv></AppBarCenterDiv>
+            <AppBarRightDiv>
+              <MenuIconDiv onClick={toggleDrawer(true)}>
+                <MenuRoundedIcon fontSize="inherit" color="inherit" />
+              </MenuIconDiv>
+            </AppBarRightDiv>
+          </AppBarDetailDiv>
+        ) : (
+          <AppBarDetailDiv>
+            <AppBarLeftDiv>
+              <LogoBtn
+                alt="Logo"
+                src={LOGO_TEXT}
+                onClick={() => onClickLogo()}
+              />
+              <AppBarDivider />
+              <MenuBtn
+                isSelected={router.pathname === '/create'}
+                onClick={() => {
+                  if (!isSignIn) {
+                    if (
+                      confirm(
+                        '로그인이 필요한 서비스입니다. 로그인 하시겠습니까?',
+                      )
+                    ) {
+                      router.push('/auth/signin');
+                    }
+                    return;
+                  }
+                  router.push('/create');
+                }}
+              >
+                자소서 생성
+              </MenuBtn>
+              <MenuBtn
+                isSelected={router.pathname === '/write'}
+                onClick={() => {
+                  if (!isSignIn) {
+                    if (
+                      confirm(
+                        '로그인이 필요한 서비스입니다. 로그인 하시겠습니까?',
+                      )
+                    ) {
+                      router.push('/auth/signin');
+                    }
+                    return;
+                  }
+                  router.push('/write');
+                }}
+              >
+                자소서 문장 추천
+              </MenuBtn>
+              <MenuBtn
+                isSelected={router.pathname === '/correct'}
+                onClick={() => {
+                  if (!isSignIn) {
+                    if (
+                      confirm(
+                        '로그인이 필요한 서비스입니다. 로그인 하시겠습니까?',
+                      )
+                    ) {
+                      router.push('/auth/signin');
+                    }
+                    return;
+                  }
+                  router.push('/correct');
+                }}
+              >
+                자소서 첨삭
+              </MenuBtn>
+            </AppBarLeftDiv>
+            <AppBarCenterDiv></AppBarCenterDiv>
+            <AppBarRightDiv>
+              {isSignIn ? (
+                <ProfileManagementBtn onClick={() => router.push('/myPage')}>
+                  <p>계정 관리</p>
+                </ProfileManagementBtn>
+              ) : (
+                <SignBtn onClick={() => router.push('/auth/signin')}>
+                  <p>로그인</p>
+                </SignBtn>
+              )}
+              <ContactBtn
+                onClick={() => {
+                  window.open('https://peterjeon.co.kr', '_blank');
+                }}
+              >
+                <p>Contact</p>
+              </ContactBtn>
+            </AppBarRightDiv>
+          </AppBarDetailDiv>
+        )}
+      </WrapBox>
+      {
+        <Drawer
+          anchor={'right'}
+          open={isMenuOpen}
+          onClose={toggleDrawer(false)}
+        >
+          {menuList()}
+        </Drawer>
+      }
     </>
   );
 };

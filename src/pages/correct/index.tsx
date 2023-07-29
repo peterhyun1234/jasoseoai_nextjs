@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import Styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -23,7 +24,10 @@ const resumePlaceholder = `1. 길동전자를 지원한 이유와 입사 후 회
 `
 
 const Correct = () => {
-    const router = useRouter()
+  const { data: session } = useSession();
+  const router = useRouter()
+
+    const [user, setUser] = useState<any>(session?.user || null);
 
     const [step, setStep] = useState<number>(0)
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -49,6 +53,8 @@ const Correct = () => {
     const getCorrection = async (curResume: string) => {
         if (curResume === null || curResume === undefined || curResume.length < 30) return
         setIsLoading(true)
+
+        //TODO: nestjs로 변경 + gpt 4로 변경
         try {
             const prompt = `아래 자기소개서를 첨삭해줘. 
             - 결과는 Markdown 형태로
@@ -94,6 +100,19 @@ const Correct = () => {
         }
     }, [router])
 
+    useEffect(() => {
+      if (session !== undefined && session === null) {
+        if (confirm('로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?')){
+          router.push('/auth/signin');
+        } else {
+          router.push('/');
+        }
+      }
+      if (!session) return;
+      if (!session.user) return;
+      setUser(session?.user);
+    }, [session]);
+
     return (
         <div style={{
             backgroundImage: `url(images/bg_common.png)`,
@@ -101,9 +120,7 @@ const Correct = () => {
             backgroundSize: '100%',
         }}>
             {isLoading && <LoadingPopup loadingText='AI가 자기소개서를 첨삭중입니다.(최대 2분)' />}
-            {
-                <Inner_TopAppBar_Home />
-            }
+            {<Inner_TopAppBar_Home isSignIn={Boolean(user)} />}
             <WrapBox>
                 {
                     step === 0 &&

@@ -19,17 +19,17 @@ const Home = () => {
   const router = useRouter();
 
   const [user, setUser] = useState<any>(session?.user || null);
+  const [isSignIn, setIsSignIn] = useState<boolean>(false);
 
   useEffect(() => {
+    if (session !== undefined && session === null) {
+      setIsSignIn(false);
+    }
     if (!session) return;
     if (!session.user) return;
-    console.log('session', session);
     setUser(session?.user);
+    setIsSignIn(true);
   }, [session]);
-
-  useEffect(() => {
-    //TODO: https://peterjeon.co.kr/ 처럼 스크롤에 따른 다양한 이벤트 ㄱㄱ
-  }, []);
 
   return (
     <div
@@ -39,7 +39,7 @@ const Home = () => {
         backgroundSize: '100%',
       }}
     >
-      {<Inner_TopAppBar_Home isSignIn={Boolean(user)} />}
+      {<Inner_TopAppBar_Home isSignIn={isSignIn} />}
       <WrapBox>
         <MainBannerDiv>
           <MainBannerIntroDiv>
@@ -57,6 +57,16 @@ const Home = () => {
             <MainBannerFunctionDiv>
               <CreationFunctionButton
                 onClick={() => {
+                  if (!isSignIn) {
+                    if (
+                      confirm(
+                        '로그인이 필요한 서비스입니다. 로그인 하시겠습니까?',
+                      )
+                    ) {
+                      router.push('/auth/signin');
+                    }
+                    return;
+                  }
                   router.push('/create');
                 }}
               >
@@ -64,6 +74,16 @@ const Home = () => {
               </CreationFunctionButton>
               <CorrectionFunctionButton
                 onClick={() => {
+                  if (!isSignIn) {
+                    if (
+                      confirm(
+                        '로그인이 필요한 서비스입니다. 로그인 하시겠습니까?',
+                      )
+                    ) {
+                      router.push('/auth/signin');
+                    }
+                    return;
+                  }
                   router.push('/correct');
                 }}
               >
@@ -137,6 +157,16 @@ const Home = () => {
                 </IntroDescription>
                 <IntroButton
                   onClick={() => {
+                    if (!isSignIn) {
+                      if (
+                        confirm(
+                          '로그인이 필요한 서비스입니다. 로그인 하시겠습니까?',
+                        )
+                      ) {
+                        router.push('/auth/signin');
+                      }
+                      return;
+                    }
                     router.push('/create?step=1');
                   }}
                 >
@@ -157,6 +187,16 @@ const Home = () => {
                 </IntroDescription>
                 <IntroButton
                   onClick={() => {
+                    if (!isSignIn) {
+                      if (
+                        confirm(
+                          '로그인이 필요한 서비스입니다. 로그인 하시겠습니까?',
+                        )
+                      ) {
+                        router.push('/auth/signin');
+                      }
+                      return;
+                    }
                     router.push('/write?step=1');
                   }}
                 >
@@ -184,6 +224,16 @@ const Home = () => {
                 </IntroDescription>
                 <IntroButton
                   onClick={() => {
+                    if (!isSignIn) {
+                      if (
+                        confirm(
+                          '로그인이 필요한 서비스입니다. 로그인 하시겠습니까?',
+                        )
+                      ) {
+                        router.push('/auth/signin');
+                      }
+                      return;
+                    }
                     router.push('/correct?step=1');
                   }}
                 >
