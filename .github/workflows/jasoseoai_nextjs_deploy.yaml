@@ -1,4 +1,4 @@
-name: jasoseo_nextjs CI/CD Pipeline
+name: jasoseoai_nextjs CI/CD Pipeline
 
 on:
   push:
@@ -7,14 +7,14 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   ECR_REGISTRY: 076831690411.dkr.ecr.ap-northeast-2.amazonaws.com
-  ECR_REPOSITORY: jasoseo_nextjs
+  ECR_REPOSITORY: jasoseoai_nextjs
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout jasoseo_nextjs repository
+    - name: Checkout jasoseoai_nextjs repository
       uses: actions/checkout@v2
 
     - name: Configure AWS credentials
@@ -46,10 +46,10 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-    - name: Checkout jasoseo_helm_charts repository
+    - name: Checkout jasoseoai_helm_charts repository
       uses: actions/checkout@v2
       with:
-        repository: peterhyun1234/jasoseo_helm_charts
+        repository: peterhyun1234/jasoseoai_helm_charts
         persist-credentials: false
         fetch-depth: 0
 
@@ -62,12 +62,12 @@ jobs:
       env:
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        yq e ".image.tag = env(IMAGE_TAG)" -i jasoseo_nextjs/values.yaml
-        cat jasoseo_nextjs/values.yaml
+        yq e ".image.tag = env(IMAGE_TAG)" -i jasoseoai_nextjs/values.yaml
+        cat jasoseoai_nextjs/values.yaml
 
         git config --global user.name 'peter jeon'
         git config --global user.email 'peterhyun1234@gmail.com'
 
         git add .
         git commit -m "feat: update image tag to ${IMAGE_TAG}" || echo "No changes to commit"
-        git push https://${{ secrets.PAT }}@github.com/peterhyun1234/jasoseo_helm_charts.git
+        git push https://${{ secrets.PAT }}@github.com/peterhyun1234/jasoseoai_helm_charts.git
