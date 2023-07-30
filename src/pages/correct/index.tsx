@@ -54,7 +54,8 @@ const Correct = () => {
         if (curResume === null || curResume === undefined || curResume.length < 30) return
         setIsLoading(true)
 
-        //TODO: nestjs로 변경 + gpt 4로 변경
+        // TODO: nestjs로 변경 + gpt 4로 변경
+        // 저장 결과는 저장하자
         try {
             const prompt = `아래 자기소개서를 첨삭해줘. 
             - 결과는 Markdown 형태로

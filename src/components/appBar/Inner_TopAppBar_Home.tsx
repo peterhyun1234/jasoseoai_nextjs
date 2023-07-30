@@ -93,7 +93,7 @@ const Inner_TopAppBar_Home = ({ isSignIn }: Props) => {
             setIsMenuOpen(false);
           }}
         >
-          계정 관리
+          마이 페이지
         </MenuListItem>
       ) : (
         <MenuListItem
@@ -229,7 +229,7 @@ const Inner_TopAppBar_Home = ({ isSignIn }: Props) => {
             <AppBarRightDiv>
               {isSignIn ? (
                 <ProfileManagementBtn onClick={() => router.push('/myPage')}>
-                  <p>계정 관리</p>
+                  <p>마이 페이지</p>
                 </ProfileManagementBtn>
               ) : (
                 <SignBtn onClick={() => router.push('/auth/signin')}>

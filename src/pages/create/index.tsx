@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useCopyToClipboard } from 'react-use';
 import { useSession } from 'next-auth/react';
 
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
 import LoadingPopup from '@/components/popup/LoadingPopup';
@@ -164,6 +164,10 @@ const Create = () => {
   };
 
   const getResume = async (resumeFormType: string) => {
+    if (!session) return;
+    const accessToken = (session as any)?.accessToken;
+    if (!accessToken) return;
+
     let resumeOption = `
 - 자기소개서 결과만 보내줘`;
     if (resumeFormType === 'maxCharacterNum') {
@@ -217,39 +221,45 @@ const Create = () => {
 
     setIsLoading(true);
     try {
-      const prompt =
-        '아래 내용들을 참고해서 자기소개서를 만들어줘.' + resumeOption;
-
-      const response = await axios.post(
-        'https://api.openai.com/v1/chat/completions',
+      const prompt = '아래 내용들을 참고해서 자기소개서를 만들어줘.' + resumeOption;
+      const res = await axios.post(
+        '/createdResumes',
         {
-          model: 'gpt-3.5-turbo',
-          messages: [{ role: 'system', content: prompt }],
-          max_tokens: 2000,
-          n: 1,
-          stop: null,
-          temperature: 0.3,
+          userId: user.id,
+          company: company,
+          job: job,
+          prompt,
         },
         {
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer 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`,
+            Authorization: `Bearer ${accessToken}`,
           },
         },
       );
-      const recvResume = response.data.choices[0].message.content.trim();
-      if (
-        recvResume !== null &&
-        recvResume !== undefined &&
-        recvResume.length > 0
-      ) {
-        setGeneratedResume(recvResume);
-      } else {
-        alert('자기소개서를 생성하는데 실패했습니다.');
+      if (res.status === 201) {
+        const recvResume = res.data;
+        setGeneratedResume(recvResume.content);
       }
     } catch (error) {
-      console.error(error);
+      const axiosError = error as AxiosError;
+      if (axiosError.response && axiosError.response.status) {
+        switch (axiosError.response.status) {
+          case 402:
+            alert('잔여 토큰이 부족합니다.');
+            break;
+          case 500:
+            alert('자기소개서 생성에 실패하였습니다.');
+            break;
+          default:
+            alert('알 수 없는 오류가 발생하였습니다.');
+        }
+      } else {
+        alert('네트워크 오류가 발생하였습니다.');
+      }
+      setIsLoading(false);
+      return;
     }
+
     setStep(step + 1);
     setIsLoading(false);
   };
@@ -731,7 +741,8 @@ const Create = () => {
                   {'님을 위한 자기소개서입니다.'}
                 </WritingBoxTitle>
                 <WritingBoxSubtitle>
-                  아래 박스를 스크롤하여 전체 내용을 확인하세요.
+                  <p>아래 박스를 스크롤하여 전체 내용을 확인하세요.</p>
+                  <p>생성된 자기소개서는 마이페이지에서 확인할 수 있습니다.</p>
                 </WritingBoxSubtitle>
                 <GeneratedResumeDiv>
                   <TextField
