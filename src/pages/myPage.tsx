@@ -139,8 +139,12 @@ const MyPage = () => {
                   </RemainingTokenDiv>
                 )}
                 <Divider />
-                <Button onClick={handleSignOut}>로그아웃</Button>
-                <Button onClick={handleDeleteUser}>탈퇴하기</Button>
+                <Button onClick={() => router.push('/create/list')}>생성한 자소서 확인</Button>
+                <Button onClick={() => router.push('/write/list')}>작성 중인 자소서 확인</Button>
+                <Button onClick={() => router.push('/correct/list')}>첨삭 받은 자소서 확인</Button>
+                <Divider />
+                <Button bgColor={'#b9b8ff'} onClick={handleSignOut}>로그아웃</Button>
+                <Button bgColor={'#b9b8ff'}  onClick={handleDeleteUser}>탈퇴하기</Button>
               </MyPageDiv>
             )}
           </WrapBox>
@@ -201,7 +205,7 @@ const Divider = Styled.div`
   background-color: #9e9e9e;
   margin: 20px 0;
 `;
-const Button = Styled.button`
+const Button = Styled.button<{ bgColor?: string }>`
   display: block;
   width: 100%;
   font-size: 16px;
@@ -211,7 +215,7 @@ const Button = Styled.button`
   margin-bottom: 16px;
   border: none;
   border-radius: 10px;
-  background-color: #7876fb;
+  background-color: ${(props) => props.bgColor || '#7876fb'};
   color: #fff;
   cursor: pointer;
   transition: background-color 0.2s;

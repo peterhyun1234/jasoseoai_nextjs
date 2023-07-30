@@ -203,7 +203,6 @@ const CreateDetail = () => {
       {<Inner_TopAppBar_Home isSignIn={Boolean(user)} />}
       <WrapBox>
         <CommonBox>
-          <WritingBoxDivider />
           {generatedResume !== undefined && generatedResume !== null && (
             <WritingBox>
               <WritingBoxTitle>
