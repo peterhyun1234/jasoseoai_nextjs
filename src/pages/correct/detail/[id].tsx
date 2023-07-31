@@ -11,6 +11,8 @@ import axios, { AxiosError } from 'axios';
 import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
 import LoadingPopup from '@/components/popup/LoadingPopup';
 
+import TextField from '@mui/material/TextField';
+
 const CreateDetail = () => {
   const { data: session } = useSession();
   const router = useRouter();
@@ -156,12 +158,37 @@ const CreateDetail = () => {
               <WritingBoxTitle>
                 {'🧾 '}
                 <WritingBoxTitleHighlightSpan>
-                  {generatedResume.title}
+                  {user.username}
                 </WritingBoxTitleHighlightSpan>
+                {'님이 작성하신 자기소개서입니다.'}
               </WritingBoxTitle>
               <WritingDate>{`${new Date(
                 generatedResume.createdAt,
               ).toLocaleString('ko-KR')}`}</WritingDate>
+              <WritingBoxSubtitle>
+                아래 박스를 스크롤하여 전체 내용을 확인하세요.
+              </WritingBoxSubtitle>
+              <GeneratedResumeDiv>
+                <TextField
+                  id="generatedResume"
+                  fullWidth
+                  multiline
+                  rows={30}
+                  variant="outlined"
+                  value={generatedResume.resume}
+                  onChange={() => {
+                    return;
+                  }}
+                />
+              </GeneratedResumeDiv>
+              <WritingBoxDivider />
+              <WritingBoxTitle>
+                {'🧾 '}
+                <WritingBoxTitleHighlightSpan>
+                  {'자소서AI'}
+                </WritingBoxTitleHighlightSpan>
+                {'의 첨삭 결과입니다.'}
+              </WritingBoxTitle>
               {generatedResume.content && generatedResume.content !== '' && (
                 <CorrectionDiv>
                   <ReactMarkdown
@@ -177,11 +204,9 @@ const CreateDetail = () => {
                   />
                 </CorrectionDiv>
               )}
-              <ModifyOrDeleteButtonBox>
-                <DeleteButton onClick={handleDeleteClick}>
-                  자소서 첨삭 내용 삭제
-                </DeleteButton>
-              </ModifyOrDeleteButtonBox>
+              <DeleteButton onClick={handleDeleteClick}>
+                자소서 첨삭 내용 삭제
+              </DeleteButton>
               <CopyButton onClick={handleCopyClick}>
                 자소서 첨삭 내용 복사
               </CopyButton>
@@ -235,38 +260,30 @@ const WritingDate = Styled.div`
     color: #888;
     margin-bottom: 10px;
 `;
-const ModifyOrDeleteButtonBox = Styled.div`
+const WritingBoxSubtitle = Styled.div`
+    font-size: 16px;
+    color: #888;
+    margin-bottom: 20px;
+`;
+const WritingBoxDivider = Styled.div`
     width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    height: 1px;
+    background-color: #ccc;
     margin-bottom: 25px;
 `;
-const ModifyButton = Styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 49%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background-color: #428d93;
-    color: #fff;
-    font-size: 17px;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
-    &:hover {
-        -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
-        box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 15px 3px;
-    }
+const GeneratedResumeDiv = Styled.div`
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
 `;
 const DeleteButton = Styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 49%;
+    width: 100%;
     padding-top: 10px;
     padding-bottom: 10px;
+    margin-bottom: 25px;
     background-color: #de4444;
     color: #fff;
     font-size: 17px;
@@ -352,6 +369,8 @@ const CorrectionDiv = Styled.div`
         background: rgba( 57, 36, 255, 0.13 );
         padding: 2px;
         border-radius: 3px;
+        word-wrap: break-word;
+        white-space: pre-wrap;
     }
 `;
 

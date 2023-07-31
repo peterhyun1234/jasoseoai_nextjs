@@ -131,7 +131,6 @@ const Inner_TopAppBar_Home = ({ isSignIn }: Props) => {
   };
 
   useEffect(() => {
-    //TODO: 스크롤 이벤트, 리사이즈 이벤트 media query로 대체
     setInnerWidth(window.innerWidth);
     setPageYOffset(window.pageYOffset);
     window.addEventListener('scroll', handleScroll);

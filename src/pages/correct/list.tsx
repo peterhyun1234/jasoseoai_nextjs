@@ -107,7 +107,7 @@ const CorrectDetail = () => {
                 router.push(`/correct/detail/${resume.id}`);
               }}
             >
-              <ResumeListItemTitle>{`🧾 ${resume.title}`}</ResumeListItemTitle>
+              <ResumeListItemTitle>{`🧾 ${resume.resume}`}</ResumeListItemTitle>
               <ResumeListItemContent>{resume.content}</ResumeListItemContent>
               <ResumeListItemDate>
                 {new Date(resume.createdAt).toLocaleString('ko-KR')}
@@ -156,6 +156,9 @@ const ResumeListItemTitle = Styled.div`
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 0.7rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 const ResumeListItemContent = Styled.div`
     text-align: left;
