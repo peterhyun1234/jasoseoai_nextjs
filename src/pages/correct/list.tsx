@@ -92,10 +92,12 @@ const CorrectDetail = () => {
       )}
       {<Inner_TopAppBar_Home isSignIn={Boolean(user)} />}
       <WrapBox>
-        <ResumeListTitle>
-          <ResumeListTitleSpan>{user.username}</ResumeListTitleSpan>님이 첨삭
-          받은 자기소개서
-        </ResumeListTitle>
+        {user !== undefined && user !== null && user.username !== undefined && (
+          <ResumeListTitle>
+            <ResumeListTitleSpan>{user.username}</ResumeListTitleSpan>님이 첨삭
+            받은 자기소개서
+          </ResumeListTitle>
+        )}
         <ResumeListDiv>
           {resumeList && resumeList.length === 0 && (
             <ResumeListItem>자기소개서가 없습니다.</ResumeListItem>
