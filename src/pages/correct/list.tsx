@@ -80,13 +80,7 @@ const CorrectDetail = () => {
   }, [session]);
 
   return (
-    <div
-      style={{
-        backgroundImage: `url(images/bg_common.png)`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: '100%',
-      }}
-    >
+    <>
       {isLoading && (
         <LoadingPopup loadingText="자기소개서를 불러오는 중입니다." />
       )}
@@ -118,7 +112,7 @@ const CorrectDetail = () => {
           ))}
         </ResumeListDiv>
       </WrapBox>
-    </div>
+    </>
   );
 };
 

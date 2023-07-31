@@ -140,13 +140,7 @@ const CreateDetail = () => {
   }, [session]);
 
   return (
-    <div
-      style={{
-        backgroundImage: `url(images/bg_common.png)`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: '100%',
-      }}
-    >
+    <>
       {isLoading && (
         <LoadingPopup loadingText="자기소개서 첨삭 결과를 불러오는 중입니다." />
       )}
@@ -214,7 +208,7 @@ const CreateDetail = () => {
           )}
         </CommonBox>
       </WrapBox>
-    </div>
+    </>
   );
 };
 
