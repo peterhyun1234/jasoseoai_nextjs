@@ -92,11 +92,21 @@ const CorrectDetail = () => {
       )}
       {<Inner_TopAppBar_Home isSignIn={Boolean(user)} />}
       <WrapBox>
+        <ResumeListTitle>
+          <ResumeListTitleSpan>{user.username}</ResumeListTitleSpan>님이 첨삭
+          받은 자기소개서
+        </ResumeListTitle>
         <ResumeListDiv>
+          {resumeList && resumeList.length === 0 && (
+            <ResumeListItem>자기소개서가 없습니다.</ResumeListItem>
+          )}
           {resumeList?.map((resume: any) => (
-            <ResumeListItem key={resume.id} onClick={() => {
-              router.push(`/correct/detail/${resume.id}`);
-            }}>
+            <ResumeListItem
+              key={resume.id}
+              onClick={() => {
+                router.push(`/correct/detail/${resume.id}`);
+              }}
+            >
               <ResumeListItemTitle>{`🧾 ${resume.title}`}</ResumeListItemTitle>
               <ResumeListItemContent>{resume.content}</ResumeListItemContent>
               <ResumeListItemDate>
@@ -117,6 +127,18 @@ const WrapBox = Styled.div`
     padding-top: calc(80px + 100px);
     padding-bottom: 100px;
     min-height: 100vh;
+`;
+const ResumeListTitle = Styled.div`
+    width: 100%;
+    text-align: left;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: #666;
+`;
+const ResumeListTitleSpan = Styled.span`
+    color: #7876fb;
+    font-size: 1.7rem;
 `;
 const ResumeListDiv = Styled.div`
     width: 100%;

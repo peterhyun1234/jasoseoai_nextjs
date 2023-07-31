@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -245,7 +245,8 @@ const Create = () => {
       if (axiosError.response && axiosError.response.status) {
         switch (axiosError.response.status) {
           case 402:
-            alert('잔여 토큰이 부족합니다.');
+            alert(`잔여 토큰이 부족합니다. 토큰 보충(무료)은 아래 이메일로 문의해주세요.
+- 이메일: peterhyun1234@gmail.com`);
             break;
           case 500:
             alert('자기소개서 생성에 실패하였습니다.');
