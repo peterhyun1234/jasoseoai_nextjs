@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Styled from 'styled-components';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useCopyToClipboard } from 'react-use';
 import { useSession } from 'next-auth/react';
@@ -32,9 +31,14 @@ const CreateDetail = () => {
   };
 
   const handleGeneratedResumeChange = (e: any) => {
+    const { value } = e.target;
+    if (value.length > 5000) {
+      alert('자기소개서는 5000자 이내로 입력해주세요.');
+      return;
+    }
     setGeneratedResume({
       ...generatedResume,
-      content: e.target.value,
+      content: value,
     });
   };
 

@@ -47,7 +47,12 @@ const Correct = () => {
   };
 
   const handleResumeChange = (e: any) => {
-    setResume(e.target.value);
+    const { value } = e.target;
+    if (value.length > 5000) {
+      alert('첨삭 받을 자기소개서는 5000자 이내로 입력해주세요.');
+      return;
+    }
+    setResume(value);
   };
 
   const getCorrection = async (curResume: string) => {

@@ -1,32 +1,21 @@
-import { SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Styled, { keyframes, css } from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
+import LoadingPopup from '@/components/popup/LoadingPopup';
 
 import temp_intro from '@/assets/images/temp_introduction.gif';
 
 import TextField from '@mui/material/TextField';
 import LinearProgress from '@mui/material/LinearProgress';
 
-import FolderCopyRoundedIcon from '@mui/icons-material/FolderCopyRounded';
-import FiberNewRoundedIcon from '@mui/icons-material/FiberNewRounded';
 import SaveAltRoundedIcon from '@mui/icons-material/SaveAltRounded';
-import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
-
-interface Tag {
-  id: string;
-  title: string;
-}
-
-interface Props {
-  tags: Tag[];
-}
 
 const Write = () => {
   const { data: session } = useSession();
@@ -35,8 +24,8 @@ const Write = () => {
   const timerRef = useRef<any>(null);
   const progressRef = useRef<any>(() => {});
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<any>(session?.user || null);
-
   const [step, setStep] = useState<number>(0);
 
   // step 1
@@ -64,15 +53,30 @@ const Write = () => {
   const [buffer, setBuffer] = useState(10);
 
   const handleCompanyChange = (e: any) => {
-    setCompany(e.target.value);
+    const { value } = e.target;
+    if (value.length > 100) {
+      alert('회사 이름은 100자 이내로 입력해주세요.');
+      return;
+    }
+    setCompany(value);
   };
 
   const handleJobChange = (e: any) => {
-    setJob(e.target.value);
+    const { value } = e.target;
+    if (value.length > 100) {
+      alert('직무 이름은 100자 이내로 입력해주세요.');
+      return;
+    }
+    setJob(value);
   };
 
   const handleMaxCharacterNumChange = (e: any) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
+    const valueNumber = Number(value);
+    if (valueNumber > 5000) {
+      alert('최대 글자 수는 5000자 이내로 입력해주세요.');
+      return;
+    }
     if (value > 0) {
       setMaxCharacterNum(value);
       setCharacterPercentage(
@@ -85,12 +89,17 @@ const Write = () => {
   };
 
   const handleResumeQuestionChange = (e: any) => {
+    const { value } = e.target;
+    if (value.length > 200) {
+      alert('질문은 200자 이내로 입력해주세요.');
+      return;
+    }
     const newWritingResumeList = writingResumeList.map(
       (item: any, index: number) => {
         if (index === writingResumeListIndex) {
           return {
             ...item,
-            question: e.target.value,
+            question: value,
           };
         }
         return item;
@@ -100,6 +109,11 @@ const Write = () => {
   };
 
   const handleWritingResumeChange = (e: any) => {
+    const { value } = e.target;
+    if (value.length > 5000) {
+      alert('자기소개서는 5000자 이내로 입력해주세요.');
+      return;
+    }
     const newWritingResumeList = writingResumeList.map(
       (item: any, index: number) => {
         if (index === writingResumeListIndex) {
@@ -115,6 +129,40 @@ const Write = () => {
     setCharacterPercentage(
       Math.floor((e.target.value.length / maxCharacterNum) * 100),
     );
+  };
+
+  const createResume = async () => {
+    if (!session) return;
+    const accessToken = (session as any)?.accessToken;
+    if (!accessToken) return;
+
+    setIsLoading(true);
+    try {
+      const res = await axios.post(
+        `/writtenResumes`,
+        {
+          company,
+          job,
+          resumeList: writingResumeList,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      if (res.status === 201) {
+        const recvResume = res.data;
+        if (recvResume !== null && recvResume !== undefined) {
+          router.push(`/write/detail/${recvResume.id}`);
+        } else {
+          alert('자소서 작성 페이지로 이동할 수 없습니다.');
+        }
+      }
+    } catch (error) {
+      alert('네트워크 오류가 발생하였습니다.');
+      console.error(error);
+    }
   };
 
   const generateNextSentence = async (currentResume: any) => {
@@ -182,6 +230,9 @@ const Write = () => {
   };
 
   useEffect(() => {
+    console.log('company: ', company);
+    console.log('job: ', job);
+    console.log('writingResumeList: ', writingResumeList);
     if (isAIReady === false) return;
     const curResume = writingResumeList[writingResumeListIndex];
     if (curResume === null || curResume === undefined || curResume.length < 10)
@@ -262,6 +313,7 @@ const Write = () => {
         backgroundSize: '100%',
       }}
     >
+      {isLoading && <LoadingPopup loadingText="자기소개서를 생성중입니다." />}
       {<Inner_TopAppBar_Home isSignIn={Boolean(user)} />}
       <WrapBox>
         {step === 0 && (
@@ -289,26 +341,6 @@ const Write = () => {
         )}
         {step === 1 && (
           <>
-            <WritingResumeFunctionBox>
-              <FunctionButtonDiv onClick={() => {}}>
-                <FunctionIconDiv>
-                  <FolderCopyRoundedIcon color="inherit" fontSize="inherit" />
-                </FunctionIconDiv>
-                <FunctionText>자소서 목록</FunctionText>
-              </FunctionButtonDiv>
-              <FunctionButtonDiv onClick={() => {}}>
-                <FunctionIconDiv>
-                  <FiberNewRoundedIcon color="inherit" fontSize="inherit" />
-                </FunctionIconDiv>
-                <FunctionText>새 자소서</FunctionText>
-              </FunctionButtonDiv>
-              <FunctionButtonDiv onClick={() => {}}>
-                <FunctionIconDiv>
-                  <ImportExportRoundedIcon color="inherit" fontSize="inherit" />
-                </FunctionIconDiv>
-                <FunctionText>내보내기</FunctionText>
-              </FunctionButtonDiv>
-            </WritingResumeFunctionBox>
             <WritingResumeBox>
               {isWritingReady === false ? (
                 <WritingCompanyBox
@@ -316,6 +348,8 @@ const Write = () => {
                     if (e.key === 'Enter') {
                       if (company.length > 0 && job.length > 0) {
                         setIsWritingReady(true);
+                        //TODO: 자소서 작성 페이지로 이동
+                        // createResume();
                       }
                     }
                   }}
@@ -359,6 +393,8 @@ const Write = () => {
                     onClick={() => {
                       if (company !== '' && job !== '') {
                         setIsWritingReady(true);
+                        //TODO: 자소서 작성 페이지로 이동
+                        // createResume();
                       }
                     }}
                   >
@@ -433,6 +469,13 @@ const Write = () => {
                             <ResumePageButtonDiv
                               isSelected={false}
                               onClick={() => {
+                                //TODO: 최대 5개까지만 추가 가능하도록
+                                if (
+                                  writingResumeList.length >= 5
+                                ) {
+                                  alert('최대 5개까지만 추가 가능합니다.');
+                                  return;
+                                }
                                 const newWritingResumeList = writingResumeList
                                   ? writingResumeList
                                   : [];
