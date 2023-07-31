@@ -8,7 +8,7 @@ import axios, { AxiosError } from 'axios';
 import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
 import LoadingPopup from '@/components/popup/LoadingPopup';
 
-const CreateDetail = () => {
+const CorrectDetail = () => {
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -26,7 +26,7 @@ const CreateDetail = () => {
 
     setIsLoading(true);
     try {
-      const response = await axios.get(`/createdResumes?userId=${userId}`, {
+      const response = await axios.get(`/correctedResumes?userId=${userId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -94,12 +94,9 @@ const CreateDetail = () => {
       <WrapBox>
         <ResumeListDiv>
           {resumeList?.map((resume: any) => (
-            <ResumeListItem
-              key={resume.id}
-              onClick={() => {
-                router.push(`/create/detail/${resume.id}`);
-              }}
-            >
+            <ResumeListItem key={resume.id} onClick={() => {
+              router.push(`/correct/detail/${resume.id}`);
+            }}>
               <ResumeListItemTitle>{`🧾 ${resume.title}`}</ResumeListItemTitle>
               <ResumeListItemContent>{resume.content}</ResumeListItemContent>
               <ResumeListItemDate>
@@ -152,4 +149,4 @@ const ResumeListItemDate = Styled.div`
     color: #a1a1a1;
 `;
 
-export default CreateDetail;
+export default CorrectDetail;
