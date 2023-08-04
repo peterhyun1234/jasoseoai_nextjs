@@ -9,7 +9,7 @@ import axios, { AxiosError } from 'axios';
 import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
 import LoadingPopup from '@/components/popup/LoadingPopup';
 
-import temp_intro from '@/assets/images/temp_introduction.gif';
+import write_4x3 from '@/assets/images/write_4x3.gif';
 
 import TextField from '@mui/material/TextField';
 
@@ -147,7 +147,7 @@ const Write = () => {
               </IntroButton>
             </IntroBox>
             <IntroImgDiv>
-              <IntroImg src={temp_intro} alt="IntroImg" />
+              <IntroImg src={write_4x3} alt="IntroImg" />
             </IntroImgDiv>
           </Box>
         )}

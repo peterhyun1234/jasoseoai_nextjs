@@ -10,7 +10,7 @@ import axios, { AxiosError } from 'axios';
 import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
 import LoadingPopup from '@/components/popup/LoadingPopup';
 
-import temp_intro from '@/assets/images/temp_introduction.gif';
+import create_4x3 from '@/assets/images/create_4x3.gif';
 
 import TextField from '@mui/material/TextField';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -221,7 +221,8 @@ const Create = () => {
 
     setIsLoading(true);
     try {
-      const prompt = '아래 내용들을 참고해서 자기소개서를 만들어줘.' + resumeOption;
+      const prompt =
+        '아래 내용들을 참고해서 자기소개서를 만들어줘.' + resumeOption;
       const res = await axios.post(
         '/createdResumes',
         {
@@ -302,14 +303,14 @@ const Create = () => {
       }}
     >
       {isLoading && (
-        <LoadingPopup loadingText="AI가 자기소개서를 생성중입니다.(최대 2분)" />
+        <LoadingPopup loadingText="AI가 자기소개서를 생성중입니다.(최대 3분)" />
       )}
       {<Inner_TopAppBar_Home isSignIn={Boolean(user)} />}
       <WrapBox>
         {step === 0 && (
           <Box>
             <IntroImgDiv>
-              <IntroImg src={temp_intro} alt="IntroImg" />
+              <IntroImg src={create_4x3} alt="IntroImg" />
             </IntroImgDiv>
             <IntroBox alignDirection="left">
               <IntroTitleTag>자소서 생성</IntroTitleTag>

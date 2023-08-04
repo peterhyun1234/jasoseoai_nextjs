@@ -12,7 +12,7 @@ import axios, { AxiosError } from 'axios';
 import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
 import LoadingPopup from '@/components/popup/LoadingPopup';
 
-import temp_intro from '@/assets/images/temp_introduction.gif';
+import correct_4x3 from '@/assets/images/correct_4x3.gif';
 
 import TextField from '@mui/material/TextField';
 
@@ -149,14 +149,14 @@ const Correct = () => {
       }}
     >
       {isLoading && (
-        <LoadingPopup loadingText="AI가 자기소개서를 첨삭중입니다.(최대 2분)" />
+        <LoadingPopup loadingText="AI가 자기소개서를 첨삭중입니다.(최대 3분)" />
       )}
       {<Inner_TopAppBar_Home isSignIn={Boolean(user)} />}
       <WrapBox>
         {step === 0 && (
           <Box>
             <IntroImgDiv>
-              <IntroImg src={temp_intro} alt="IntroImg" />
+              <IntroImg src={correct_4x3} alt="IntroImg" />
             </IntroImgDiv>
             <IntroBox alignDirection="left">
               <IntroTitleTag>자소서 첨삭</IntroTitleTag>

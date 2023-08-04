@@ -6,9 +6,10 @@ import { useRouter } from 'next/router';
 
 import Inner_TopAppBar_Home from '@/components/appBar/Inner_TopAppBar_Home';
 
-import temp_intro from '@/assets/images/temp_introduction.gif';
-import temp1x1 from '@/assets/images/temp1x1.gif';
-import temp3x4 from '@/assets/images/temp3x4.gif';
+import create_1x1 from '@/assets/images/create_1x1.gif';
+import write_4x3 from '@/assets/images/write_4x3.gif';
+import create_4x3 from '@/assets/images/create_4x3.gif';
+import correct_4x3 from '@/assets/images/correct_4x3.gif';
 
 import FastForwardRoundedIcon from '@mui/icons-material/FastForwardRounded';
 import GppGoodRoundedIcon from '@mui/icons-material/GppGoodRounded';
@@ -92,9 +93,9 @@ const Home = () => {
             </MainBannerFunctionDiv>
           </MainBannerIntroDiv>
           <MainBannerImgDiv>
-            <MainBannerImg4x3 src={temp_intro} alt="main_banner" />
-            <MainBannerImg3x4 src={temp3x4} alt="main_banner" />
-            <MainBannerImg1x1 src={temp1x1} alt="main_banner" />
+            <MainBannerImg4x3 src={correct_4x3} alt="MainBannerImg4x3" />
+            <MainBannerLeftImg4x3 src={write_4x3} alt="MainBannerLeftImg4x3" />
+            <MainBannerRightImg1x1 src={create_1x1} alt="MainBannerRightImg1x1" />
           </MainBannerImgDiv>
         </MainBannerDiv>
         <ProsIntroDiv>
@@ -143,7 +144,7 @@ const Home = () => {
           <FunctionIntroDiv>
             <Box>
               <IntroImgDiv>
-                <IntroImg src={temp_intro} alt="IntroImg" />
+                <IntroImg src={create_4x3} alt="IntroImg" />
               </IntroImgDiv>
               <IntroBox alignDirection="left">
                 <IntroTitleTag>자소서 생성</IntroTitleTag>
@@ -204,14 +205,14 @@ const Home = () => {
                 </IntroButton>
               </IntroBox>
               <IntroImgDiv>
-                <IntroImg src={temp_intro} alt="IntroImg" />
+                <IntroImg src={write_4x3} alt="IntroImg" />
               </IntroImgDiv>
             </Box>
           </FunctionIntroDiv>
           <FunctionIntroDiv>
             <Box>
               <IntroImgDiv>
-                <IntroImg src={temp_intro} alt="IntroImg" />
+                <IntroImg src={correct_4x3} alt="IntroImg" />
               </IntroImgDiv>
               <IntroBox alignDirection="left">
                 <IntroTitleTag>자소서 첨삭</IntroTitleTag>
@@ -376,13 +377,13 @@ const MainBannerImg4x3 = Styled(Image)`
     box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 40px 20px;
     border-radius: 10px;
 `;
-const MainBannerImg3x4 = Styled(Image)`
+const MainBannerLeftImg4x3 = Styled(Image)`
     position: absolute;
     left: 0;
     top: 270px;
-    width: 20%;
+    width: 30%;
     height: auto;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 3;
     -webkit-box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 40px 20px;
     box-shadow: rgba(0, 0, 0, 0.27) 0px 0px 40px 20px;
     border-radius: 10px;
@@ -390,7 +391,7 @@ const MainBannerImg3x4 = Styled(Image)`
         top: 27vw;
     }
 `;
-const MainBannerImg1x1 = Styled(Image)`
+const MainBannerRightImg1x1 = Styled(Image)`
     position: absolute;
     right: 0;
     top: 120px;
