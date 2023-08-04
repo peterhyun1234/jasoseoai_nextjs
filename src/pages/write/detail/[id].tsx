@@ -27,6 +27,7 @@ const WriteRetail = () => {
   const [isNotOwner, setIsNotOwner] = useState<boolean>(false);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isUpdateLoading, setIsUpdateLoading] = useState<boolean>(false);
 
   const [resume, setResume] = useState<any>(null);
 
@@ -56,7 +57,9 @@ const WriteRetail = () => {
       });
       setCharacterPercentage(
         Math.floor(
-          (resumeItemList[resumeItemListIndex].answer.length / value) * 100,
+          (resumeItemList[resumeItemListIndex].answer.length /
+            maxCharacterNum) *
+            100,
         ),
       );
     }
@@ -116,11 +119,90 @@ const WriteRetail = () => {
   };
 
   const deleteResume = async () => {
-    // TODO: delete
+    if (!session) return;
+    const accessToken = (session as any)?.accessToken;
+    if (!accessToken) return;
+    if (!resume) return;
+
+    setIsLoading(true);
+
+    try {
+      axios.delete(`/writtenResumes/${resume.id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      alert('자기소개서가 삭제되었습니다.');
+      router.push('/');
+    } catch (error) {
+      const { response } = error as AxiosError;
+      if (response) {
+        const { status } = response;
+        if (status === 401) {
+          alert('로그인이 필요한 서비스입니다.');
+          router.push('/auth/signin');
+        } else if (status === 404) {
+          alert('존재하지 않는 자기소개서입니다.');
+          router.push('/');
+        } else {
+          alert('알 수 없는 오류가 발생했습니다.');
+          router.push('/');
+        }
+      } else {
+        alert('알 수 없는 오류가 발생했습니다.');
+        router.push('/');
+      }
+    }
+
+    setIsLoading(false);
   };
 
   const updateResume = async () => {
-    // TOOD: update
+    if (!session) return;
+    const accessToken = (session as any)?.accessToken;
+    if (!accessToken) return;
+    if (!resume) return;
+
+    setIsUpdateLoading(true);
+
+    try {
+      axios.put(
+        `/writtenResumes/${resume.id}`,
+        {
+          maxCharacterNum: resume.maxCharacterNum,
+          resumeItemList: resume.resumeItemList,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      setResume({
+        ...resume,
+        updatedAt: new Date(),
+      });
+    } catch (error) {
+      const { response } = error as AxiosError;
+      if (response) {
+        const { status } = response;
+        if (status === 401) {
+          alert('로그인이 필요한 서비스입니다.');
+          router.push('/auth/signin');
+        } else if (status === 404) {
+          alert('존재하지 않는 자기소개서입니다.');
+          router.push('/');
+        } else {
+          alert('알 수 없는 오류가 발생했습니다.');
+          router.push('/');
+        }
+      } else {
+        alert('알 수 없는 오류가 발생했습니다.');
+        router.push('/');
+      }
+    }
+
+    setIsUpdateLoading(false);
   };
 
   const generateNextSentence = async (currentResume: any) => {
@@ -204,7 +286,6 @@ const WriteRetail = () => {
         },
       });
       const { data } = response;
-      console.log(data);
       if (data.userId !== user.id) {
         setIsNotOwner(true);
       }
@@ -238,8 +319,12 @@ const WriteRetail = () => {
     if (resume.resumeItemList === null || resume.resumeItemList === undefined)
       return;
 
-    const curResume = resume.resumeItemList[resumeItemListIndex]?.answer;
-    if (curResume === null || curResume === undefined || curResume.length < 10)
+    const curResume = resume.resumeItemList[resumeItemListIndex];
+    if (
+      curResume === null ||
+      curResume === undefined ||
+      curResume?.answer.length < 10
+    )
       return;
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -260,6 +345,7 @@ const WriteRetail = () => {
   useEffect(() => {
     if (!id) return;
     if (!user) return;
+    if (resume) return;
     if (id && Number.isInteger(Number(id)) && Number(id) >= 1) {
       getResume(Number(id));
     } else {
@@ -300,12 +386,17 @@ const WriteRetail = () => {
   });
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    const progressTimer = setInterval(() => {
       progressRef.current();
-    }, 500);
+    }, 1000);
+
+    const updateTimer = setInterval(() => {
+      updateResume();
+    }, 1000 * 60);
 
     return () => {
-      clearInterval(timer);
+      clearInterval(progressTimer);
+      clearInterval(updateTimer);
     };
   }, []);
 
@@ -362,67 +453,66 @@ const WriteRetail = () => {
                         </DeleteResumeButtonDiv>
                       </WritingResumeCompanyBox>
                       <DeleteAndSaveButtonDiv>
-                      <ResumeItemDeleteButtonDiv
-                        onClick={() => {
-                          if (resume.resumeItemList.length <= 1) {
-                            alert(
-                              '자기소개서 항목은 최소 1개 이상이어야 합니다.',
-                            );
-                            return;
-                          }
-                          if (
-                            !confirm(
-                              '자기소개서 항목을 정말로 삭제하시겠습니까?',
-                            )
-                          ) {
-                            return;
-                          }
-                          const newResumeItemList =
-                            resume.resumeItemList.filter(
-                              (item: any, index: number) => {
-                                if (index === resumeItemListIndex) {
-                                  return false;
-                                }
-                                return true;
-                              },
-                            );
-                          setResume({
-                            ...resume,
-                            resumeItemList: newResumeItemList,
-                          });
-                          setResumeItemListIndex(0);
-                        }}
-                      >
-                        <DeleteIconDiv>
-                          <RemoveCircleOutlineRoundedIcon
-                            color="inherit"
-                            fontSize="inherit"
-                          />
-                        </DeleteIconDiv>
-                        <ResumeItemDeleteText>항목 삭제</ResumeItemDeleteText>
-                      </ResumeItemDeleteButtonDiv>
-                      <WritingResumeSaveButtonDiv
-                        onClick={() => {
-                          // TODO: save
-                          // TODO: 자동 저장도 구현 필요
-                        }}
-                      >
-                        <SaveIconDiv>
-                          <SaveAltRoundedIcon
-                            color="inherit"
-                            fontSize="inherit"
-                          />
-                        </SaveIconDiv>
-                        <WritingResumeSaveButtonText>
-                          저장하기
-                        </WritingResumeSaveButtonText>
-                      </WritingResumeSaveButtonDiv>
-                      <LastModifiedText>
-                        <p>수정일(자동 저장): </p>
-                        <p>
-                          {new Date(resume.updatedAt).toLocaleString('ko-KR')}
-                        </p>
-                      </LastModifiedText>
+                        <ResumeItemDeleteButtonDiv
+                          onClick={() => {
+                            if (resume.resumeItemList.length <= 1) {
+                              alert(
+                                '자기소개서 항목은 최소 1개 이상이어야 합니다.',
+                              );
+                              return;
+                            }
+                            if (
+                              !confirm(
+                                '자기소개서 항목을 정말로 삭제하시겠습니까?',
+                              )
+                            ) {
+                              return;
+                            }
+                            const newResumeItemList =
+                              resume.resumeItemList.filter(
+                                (item: any, index: number) => {
+                                  if (index === resumeItemListIndex) {
+                                    return false;
+                                  }
+                                  return true;
+                                },
+                              );
+                            setResume({
+                              ...resume,
+                              resumeItemList: newResumeItemList,
+                            });
+                            setResumeItemListIndex(0);
+                          }}
+                        >
+                          <DeleteIconDiv>
+                            <RemoveCircleOutlineRoundedIcon
+                              color="inherit"
+                              fontSize="inherit"
+                            />
+                          </DeleteIconDiv>
+                          <ResumeItemDeleteText>항목 삭제</ResumeItemDeleteText>
+                        </ResumeItemDeleteButtonDiv>
+                        <WritingResumeSaveButtonDiv
+                          onClick={() => {
+                            updateResume();
+                          }}
+                        >
+                          <SaveIconDiv>
+                            <SaveAltRoundedIcon
+                              color="inherit"
+                              fontSize="inherit"
+                            />
+                          </SaveIconDiv>
+                          <WritingResumeSaveButtonText>
+                            {isUpdateLoading ? '저장 중...' : '저장하기'}
+                          </WritingResumeSaveButtonText>
+                        </WritingResumeSaveButtonDiv>
+                        <LastModifiedText>
+                          <p>수정일(자동 저장): </p>
+                          <p>
+                            {new Date(resume.updatedAt).toLocaleString('ko-KR')}
+                          </p>
+                        </LastModifiedText>
                       </DeleteAndSaveButtonDiv>
                     </WritingCompanyBoxHeaderDiv>
                     <WritingResumeBoxDivider />
@@ -642,7 +732,7 @@ const WriteRetail = () => {
 const WrapBox = Styled.div`
     width: 100%;
     display: inline-block;
-    max-width: 1000px;
+    max-width: 850px;
     padding-top: calc(80px + 100px);
     padding-bottom: 100px;
     min-height: 100vh;
