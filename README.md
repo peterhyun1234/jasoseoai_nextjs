@@ -13,8 +13,19 @@ https://jasoseoai.co.kr/
 <br/>
 
 ## Table of Contents
-TODO
 
+- [Service Introduction](#service-introduction)
+- [Feature Introduction](#1-feature-introduction)
+  - [자기소개서 생성](#11-자기소개서-생성)
+  - [자기소개서 문장 추천](#12-자기소개서-문장-추천)
+  - [자기소개서 첨삭](#13-자기소개서-첨삭)
+- [DevOps](#2-devops)
+  - [DevOps pipeline](#21-devops-pipeline)
+  - [API Health Test](#22-api-health-test)
+  - [Monitoring](#23-monitoring)
+  - [CI/CD pipeline](#24-cicd-pipeline)
+- [How to use](#3-how-to-use)
+- [Contacts](#contacts)
 
 ## 1. Feature Introduction
 
@@ -95,7 +106,7 @@ API_SERVER_URI
 PORT
 
 # Run
-npm run start:dev
+npm run dev
 ```
 
 ## Contacts
