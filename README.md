@@ -1,131 +1,114 @@
-# jasoseoai_nextjs
-A service that automatically creates "jasoseo" or helps correction
+## Service Introduction
 
-### Required
-- node version: v16.14.2(lts) 
-- npm version: 8.5.0
-- nginx version: nginx/1.18.0 (Ubuntu)
+<br/>
 
-### Directory 설명
-- /conf
-  - conf 파일 저장 용도
-- /build(not in remote repo)
-  - 빌드 파일 저장 용도
-- /public
-  - /build를 구성하기 위한 껍데기 용도
-- /src
-  - 서비스를 구성하는 코드 및 리소스 저장 용도
-- /var
-  - 로그같은 가변적인 파일 보관 용도
+https://jasoseoai.co.kr/
 
-## 배포 방법 (추후 배포 이후 단계랑 같이 docs/로 이관예정)
-### 개발
-  - local 환경에서 테스트용 배포
+<br/>
+
+자소서 AI는 사용자의 개별적인 필요와 상황에 맞게 **맞춤형 자기소개서를 작성**하는 데 도움을 줍니다. 
+
+모든 사용자에게 더 나은 경험을 제공하고자 모든 기능은 **무료로 제공**됩니다. 그러나 무분별한 사용을 막기 위해 **각 계정에는 사용 제한**이 있습니다.
+
+<br/>
+
+## Table of Contents
+
+- [Service Introduction](#service-introduction)
+- [Feature Introduction](#1-feature-introduction)
+  - [자기소개서 생성](#11-자기소개서-생성)
+  - [자기소개서 문장 추천](#12-자기소개서-문장-추천)
+  - [자기소개서 첨삭](#13-자기소개서-첨삭)
+- [DevOps](#2-devops)
+  - [DevOps pipeline](#21-devops-pipeline)
+  - [API Health Test](#22-api-health-test)
+  - [Monitoring](#23-monitoring)
+  - [CI/CD pipeline](#24-cicd-pipeline)
+- [How to use](#3-how-to-use)
+- [Contacts](#contacts)
+
+## 1. Feature Introduction
+
+### 1.1. 자기소개서 생성
+- **특징**:
+  - model: gpt-4
+  - temperature: 0.3
+  - max_tokens: 4000
+- **설명**: 회사와 개인의 특성을 분석하여, AI가 최적화된 자기소개서를 작성
+
+<kbd>
+  <img src="https://github.com/peterhyun1234/jasoseoai_nextjs/assets/46476398/4051d3ee-58e6-42d3-a4f6-64f42f0091c0" width="800" style="border: 1px solid gray;">
+</kbd>
+
+### 1.2. 자기소개서 문장 추천
+- **특징**:
+  - model: gpt-3.5-turbo
+  - temperature: 0.5
+  - max_tokens: 2000
+- **설명**: 작성 중인 자기소개서와 제공하신 회사 정보, 개인 정보 기반 다음 문장 추천
+
+<kbd>
+  <img src="https://github.com/peterhyun1234/jasoseoai_nextjs/assets/46476398/a7522457-84aa-4a1b-a67c-a2d813adcede" width="800" style="border: 1px solid gray;">
+</kbd>
+
+### 1.3. 자기소개서 첨삭
+- **특징**:
+  - model: gpt-4
+  - temperature: 0.3
+  - max_tokens: 4000
+- **설명**: 자기소개서에 대한 맞춤법 검사, 잘 쓴 점, 그리고 개선할 점을 상세하게 첨삭
+
+<kbd>
+  <img src="https://github.com/peterhyun1234/jasoseoai_nextjs/assets/46476398/698741c5-a3e6-4079-8b05-9fa5c25c6549" width="800" style="border: 1px solid gray;">
+</kbd>
+
+
+
+## 2. DevOps
+### 2.1. DevOps pipeline
+
+![image](https://github.com/peterhyun1234/neodohae_nextjs/assets/46476398/dff5ccdf-22c9-4a61-93e1-82f4803c0df9)
+
+### 2.2. API Health Test
+- 1분마다 각 API 호출을 통해서 서비스의 상태를 파악하고 관리자에게 알림을 보내는 시스템 구현
+
+![image](https://github.com/peterhyun1234/neodohae_nextjs/assets/46476398/5e79b0b5-07ad-439b-bd6a-e64254c06600)
+
+
+### 2.3. Monitoring
+- Grafana, Loki, Promtail 기반 서버와 컨테이너의 메트릭, 로그를 수집하고 가시화하고 특정 상황에 맞게 알림 전송
+
+![image](https://github.com/peterhyun1234/neodohae_nextjs/assets/46476398/482a85eb-95af-4b8f-b08c-e8a5dd88541e)
+
+### 2.4. CI/CD pipeline
+- Github actions를 통해서 ECR에 이미지가 저장되고, ArgoCD를 통해서 무중단 배포
+
+![image](https://github.com/peterhyun1234/neodohae_nextjs/assets/46476398/cad3bdee-98ba-4e39-a08b-f1c99693e8eb)
+
+
+## 3. How to use
+
 ```bash
-# 위 "Required" 확인 (nginx 확인은 필요없음)
-node -v # should be v16.14.2
-npm -v # should be 8.5.0
 
-# jasoseoai_nextjs 로컬로 불러서 실행
-git clone https://github.com/PortValue/jasoseoai_nextjs.git
-cd jasoseoai_nextjs && npm i
-npm run validation:init
-npm run validation
-npm start
+# Clone this repo
+git clone https://github.com/peterhyun1234/jasoseoai_nextjs.git
+
+# Create a files named `.env.development` and `.env.production` in the root directory of your project.
+# Open the files and add the following environment variables:
+KAKAO_CLIENT_ID
+KAKAO_CLIENT_SECRET
+SSO_GITHUB_CLIENT_ID
+SSO_GITHUB_CLIENT_SECRET
+NEXTAUTH_URL
+NEXTAUTH_SECRET
+JWT_SECRET
+API_SERVER_URI
+PORT
+
+# Run
+npm run dev
 ```
-- 데모 확인
-  - https://localhost:9090/
 
-### BETA (미정)
-  - (**주의!!!!! 모든 과정 제대로 이해한 상태에서 해야함**)
-  - pvconnect로 dev instance 접속
-```bash
-cd /home/ubuntu/release/jasoseoai_nextjs && git checkout release && git branch && git stash list
-
-git fetch origin `branch list`	# origin 의 branch 를 fetch
-git difftool main $branch1	# 변경 diff 확인
-git merge $branch1 $branch2 ...	# 변경할 브랜치를 merge
-
-# 코드변경 한번 더 확인
-git diff main release --stat
-git difftool main release
-
-# 코드 변경 상태 모든 커밋된 상태인지 한번 더 확인
-git status
-
-# 필요에 따라 package 설치
-npm install
-npm run validation
-
-# BETA용 빌드 및 BETA 장비 배포
-npm run build:dev
-
-# nginx 갱신(conf/ 변경시에만)
-npm run nginx:cp_conf
-npm run nginx:restart
-```
-- BETA 데모 확인
-  - https://beta.jasoseoai.com/
-
-### RC (미정)
-  - (**주의!!!!! 모든 과정 제대로 이해한 상태에서 해야함**)
-  - pvconnect로 dev instance 접속
-```bash
-cd /home/ubuntu/release/jasoseoai_nextjs && git checkout release && git branch && git stash list
-
-git fetch origin `branch list`	# origin 의 branch 를 fetch
-git difftool main $branch1	# 변경 diff 확인
-git merge $branch1 $branch2 ...	# 변경할 브랜치를 merge
-
-# 코드변경 한번 더 확인
-git diff main release --stat
-git difftool main release
-
-# 코드 변경 상태 모든 커밋된 상태인지 한번 더 확인
-git status
-
-# 필요에 따라 package 설치
-npm install
-npm run validation
-
-# RC용 빌드 및 RC 장비 배포
-npm run build
-
-# nginx 갱신(conf/ 변경시에만)
-npm run nginx:cp_conf
-npm run nginx:restart
-```
-- RC 데모 확인
-  - https://rc.jasoseoai.com/
-### RELEASE (미정)
-  - (**주의!!!!! 모든 과정 제대로 이해한 상태에서 해야함**)
-  - (**주의!!!!! 모든 과정 제대로 이해한 상태에서 해야함**)
-  - (**주의!!!!! 모든 과정 제대로 이해한 상태에서 해야함**)
-  - pvconnect로 fe instance 접속
-```bash
-cd /home/ubuntu/release/jasoseoai_nextjs && git checkout release && git branch && git stash list
-
-git fetch origin `branch list`	# origin 의 branch 를 fetch
-git difftool main $branch1	# 변경 diff 확인
-git merge $branch1 $branch2 ...	# 변경할 브랜치를 merge
-
-# 코드변경 한번 더 확인
-git diff main release --stat
-git difftool main release
-
-# 코드 변경 상태 모든 커밋된 상태인지 한번 더 확인
-git status
-
-# 필요에 따라 package 설치
-npm install
-npm run validation
-
-# RELEASE용 빌드 및 RELEASE 장비 배포
-npm run build
-
-# nginx 갱신(conf/ 변경시에만)
-npm run nginx:cp_conf
-npm run nginx:restart
-```
-- RELEASE 데모 확인
-  - https://www.jasoseoai.com/
+## Contacts
+- email: peterhyun1234@gmail.com
+- https://peterjeon.co.kr/
