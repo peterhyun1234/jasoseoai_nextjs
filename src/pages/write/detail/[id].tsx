@@ -484,12 +484,6 @@ const WriteRetail = () => {
                             setResumeItemListIndex(0);
                           }}
                         >
-                          <DeleteIconDiv>
-                            <RemoveCircleOutlineRoundedIcon
-                              color="inherit"
-                              fontSize="inherit"
-                            />
-                          </DeleteIconDiv>
                           <ResumeItemDeleteText>항목 삭제</ResumeItemDeleteText>
                         </ResumeItemDeleteButtonDiv>
                         <WritingResumeSaveButtonDiv
@@ -504,7 +498,7 @@ const WriteRetail = () => {
                             />
                           </SaveIconDiv>
                           <WritingResumeSaveButtonText>
-                            {isUpdateLoading ? '저장 중...' : '저장하기'}
+                            {isUpdateLoading ? '저장 중...' : '저장'}
                           </WritingResumeSaveButtonText>
                         </WritingResumeSaveButtonDiv>
                         <LastModifiedText>
